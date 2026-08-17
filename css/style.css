@@ -537,29 +537,6 @@ body[data-scene="intro"] .long-ago {
   object-position: center 20%;
 }
 
-.dark-side-seal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin: 4px 0 0;
-  color: #c62828;
-  font-family: "Pathway Gothic One", "News Cycle", sans-serif;
-  font-size: 0.95rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.dark-side-seal img {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center 15%;
-  border: 1px solid rgba(198, 40, 40, 0.7);
-  box-shadow: 0 0 10px rgba(198, 40, 40, 0.45);
-}
-
 .girl-btn {
   display: none;
 }
