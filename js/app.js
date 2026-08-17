@@ -1,6 +1,12 @@
 const stars = document.getElementById("stars");
 const fx = document.getElementById("fx");
 
+function isGirlReveal() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.has("meisje") || params.get("gender") === "meisje") return true;
+  return window.GENDER_REVEAL === "meisje";
+}
+
 function sizeCanvas(canvas) {
   if (!canvas) return null;
   const ctx = canvas.getContext("2d");
@@ -287,24 +293,81 @@ muteBtn?.addEventListener("click", () => {
 });
 
 /* —— Crawl-flow —— */
-let finished = false;
+let crawlPaused = false;
+let crawlSpeed = 1;
 
-function showReveal() {
-  if (finished) return;
-  finished = true;
-  document.body.dataset.scene = "reveal";
+function crawlTrack() {
+  return document.querySelector("[data-crawl-track]");
+}
+
+function crawlAnimation() {
+  const track = crawlTrack();
+  return track?.getAnimations?.()?.[0] ?? null;
+}
+
+function applyCrawlSpeed() {
+  const anim = crawlAnimation();
+  if (anim) anim.playbackRate = crawlSpeed;
+  const label = document.querySelector("[data-speed-label]");
+  if (label) {
+    const pretty = Number.isInteger(crawlSpeed) ? `${crawlSpeed}` : String(crawlSpeed);
+    label.textContent = `${pretty}×`;
+  }
+}
+
+function setCrawlPaused(paused) {
+  crawlPaused = paused;
+  const anim = crawlAnimation();
+  if (anim) {
+    if (paused) anim.pause();
+    else anim.play();
+  } else {
+    const track = crawlTrack();
+    if (track) track.style.animationPlayState = paused ? "paused" : "running";
+  }
+  const btn = document.querySelector("[data-pause]");
+  if (btn) btn.textContent = paused ? "Speel" : "Pauze";
+}
+
+function hideGalaxyChrome() {
   const start = document.querySelector("[data-start]");
   const intro = document.querySelector("[data-intro]");
   const crawl = document.querySelector("[data-crawl]");
-  const reveal = document.querySelector("[data-reveal]");
   const skip = document.querySelector("[data-skip]");
+  const controls = document.querySelector("[data-crawl-controls]");
   if (start) start.hidden = true;
   if (intro) intro.hidden = true;
   if (crawl) crawl.hidden = true;
   if (skip) skip.hidden = true;
+  if (controls) controls.hidden = true;
   if (muteBtn) muteBtn.hidden = true;
-  const secret = document.querySelector("[data-secret]");
-  if (secret) secret.hidden = false;
+}
+
+function showWait() {
+  if (isGirlReveal()) {
+    window.location.href = "meisje.html";
+    return;
+  }
+  if (document.body.dataset.scene === "wait" || document.body.dataset.scene === "reveal") return;
+  document.body.dataset.scene = "wait";
+  hideGalaxyChrome();
+  const wait = document.querySelector("[data-wait]");
+  const girlLink = document.querySelector("[data-girl-link]");
+  if (wait) wait.hidden = false;
+  if (girlLink) girlLink.hidden = false;
+  document.title = "De echo";
+  stopAudio();
+}
+
+function showReveal() {
+  if (document.body.dataset.scene === "reveal") return;
+  document.body.dataset.scene = "reveal";
+  hideGalaxyChrome();
+  const wait = document.querySelector("[data-wait]");
+  const reveal = document.querySelector("[data-reveal]");
+  const girlLink = document.querySelector("[data-girl-link]");
+  if (wait) wait.hidden = true;
+  if (girlLink) girlLink.hidden = false;
   if (reveal) reveal.hidden = false;
   document.title = "Een mini-Jedi";
   stopAudio();
@@ -312,7 +375,7 @@ function showReveal() {
 }
 
 function startCrawl() {
-  if (finished || document.body.dataset.scene === "reveal") return;
+  if (document.body.dataset.scene === "wait" || document.body.dataset.scene === "reveal") return;
   document.body.dataset.scene = "crawl";
   const intro = document.querySelector("[data-intro]");
   const crawl = document.querySelector("[data-crawl]");
@@ -324,15 +387,21 @@ function startCrawl() {
   track.classList.remove("is-crawling");
   track.style.animationDuration = "";
   void track.offsetWidth;
-  const pxPerSec = 24;
-  const duration = Math.max(140, Math.round((track.scrollHeight + window.innerHeight) / pxPerSec));
+  const pxPerSec = 52;
+  const duration = Math.max(55, Math.round((track.scrollHeight + window.innerHeight) / pxPerSec));
   track.style.animationDuration = `${duration}s`;
   track.classList.add("is-crawling");
-  track.addEventListener("animationend", showReveal, { once: true });
+  track.addEventListener("animationend", showWait, { once: true });
+  const controls = document.querySelector("[data-crawl-controls]");
+  if (controls) controls.hidden = false;
+  window.requestAnimationFrame(() => {
+    applyCrawlSpeed();
+    setCrawlPaused(crawlPaused);
+  });
 }
 
 function beginShow() {
-  if (finished || document.body.dataset.scene !== "start") return;
+  if (document.body.dataset.scene !== "start") return;
   const start = document.querySelector("[data-start]");
   const intro = document.querySelector("[data-intro]");
   const skip = document.querySelector("[data-skip]");
@@ -351,7 +420,26 @@ function beginShow() {
 
 if (document.body.classList.contains("galaxy")) {
   document.querySelector("[data-start-btn]")?.addEventListener("click", beginShow);
-  document.querySelector("[data-skip]")?.addEventListener("click", showReveal);
+  document.querySelector("[data-skip]")?.addEventListener("click", showWait);
+  document.querySelector("[data-after-echo]")?.addEventListener("click", showReveal);
+
+  document.querySelector("[data-pause]")?.addEventListener("click", () => {
+    if (document.body.dataset.scene !== "crawl") return;
+    setCrawlPaused(!crawlPaused);
+  });
+
+  document.querySelector("[data-speed]")?.addEventListener("input", (event) => {
+    crawlSpeed = Number(event.target.value) || 1;
+    applyCrawlSpeed();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.code !== "Space" && event.key !== " ") return;
+    if (document.body.dataset.scene !== "crawl") return;
+    if (event.target.matches("input, button, textarea")) return;
+    event.preventDefault();
+    setCrawlPaused(!crawlPaused);
+  });
 
   const secret = document.querySelector("[data-secret]");
   let secretTaps = [];
@@ -370,7 +458,7 @@ if (document.body.classList.contains("galaxy")) {
   });
 
   document.addEventListener("keydown", (event) => {
-    if (document.body.dataset.scene !== "reveal") return;
+    if (document.body.dataset.scene !== "reveal" && document.body.dataset.scene !== "wait") return;
     if (event.key !== "m" && event.key !== "M") return;
     const now = Date.now();
     secretKeys = secretKeys.filter((t) => now - t < 1800);
