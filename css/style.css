@@ -79,9 +79,8 @@ a {
 .crawl-controls {
   position: fixed;
   right: 16px;
-  top: 50%;
+  top: 72px;
   z-index: 20;
-  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -789,9 +788,10 @@ body[data-scene="intro"] .long-ago {
   .mute-btn { left: 10px; }
 
   .crawl-controls {
+    top: 52px;
     right: 8px;
-    padding: 10px 8px;
-    gap: 8px;
+    padding: 8px 6px;
+    gap: 6px;
   }
 }
 
