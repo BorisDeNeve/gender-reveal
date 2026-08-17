@@ -520,12 +520,26 @@ body[data-scene="intro"] .long-ago {
   line-height: 1.4;
 }
 
-.reveal-foto {
+.reveal-fotos {
+  display: grid;
+  gap: 12px;
   width: min(92vw, 520px);
   margin: 8px 0 16px;
+}
+
+.reveal-foto {
+  width: 100%;
+  margin: 0;
   border: 2px solid rgba(255, 232, 31, 0.55);
   box-shadow: 0 0 28px rgba(255, 232, 31, 0.18);
   overflow: hidden;
+}
+
+@media (min-width: 900px) {
+  .reveal-fotos {
+    width: min(94vw, 980px);
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .reveal-foto img {
