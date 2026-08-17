@@ -863,7 +863,8 @@ body[data-scene="intro"] .long-ago {
   .bow,
   .balloon,
   .glitter,
-  .start-btn {
+  .start-btn,
+  .reveal-morph-grin {
     animation: none;
   }
 
