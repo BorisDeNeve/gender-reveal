@@ -794,10 +794,13 @@ body[data-scene="intro"] .long-ago {
   .mute-btn { left: 10px; }
 
   .crawl-controls {
-    top: 52px;
-    right: 8px;
-    padding: 8px 6px;
-    gap: 6px;
+    display: none;
+  }
+}
+
+@media (pointer: coarse) and (max-width: 1100px) {
+  .crawl-controls {
+    display: none;
   }
 }
 
