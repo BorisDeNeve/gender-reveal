@@ -315,6 +315,23 @@ function applyCrawlSpeed() {
   }
 }
 
+function crawlDurationMs(anim) {
+  const timing = anim?.effect?.getComputedTiming?.();
+  const duration = Number(timing?.duration);
+  return Number.isFinite(duration) ? duration : 0;
+}
+
+function scrubCrawlByPixels(dy) {
+  const anim = crawlAnimation();
+  const track = crawlTrack();
+  if (!anim || !track) return;
+  const travel = track.scrollHeight + window.innerHeight;
+  const msPerPx = travel > 0 ? crawlDurationMs(anim) / travel : 20;
+  const next = (anim.currentTime || 0) - dy * msPerPx;
+  const max = crawlDurationMs(anim) || next;
+  anim.currentTime = Math.min(max, Math.max(0, next));
+}
+
 function setCrawlPaused(paused) {
   crawlPaused = paused;
   const anim = crawlAnimation();
@@ -432,6 +449,56 @@ if (document.body.classList.contains("galaxy")) {
     crawlSpeed = Number(event.target.value) || 1;
     applyCrawlSpeed();
   });
+
+  const crawlStage = document.querySelector("[data-crawl]");
+  let dragging = false;
+  let lastY = 0;
+  let dragPaused = false;
+
+  function ignoreCrawlDrag(target) {
+    return target.closest(".crawl-controls, .skip-btn, .mute-btn, .pause-btn, .speed-slider");
+  }
+
+  crawlStage?.addEventListener("pointerdown", (event) => {
+    if (document.body.dataset.scene !== "crawl") return;
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+    if (ignoreCrawlDrag(event.target)) return;
+    const anim = crawlAnimation();
+    if (!anim) return;
+    dragging = true;
+    lastY = event.clientY;
+    dragPaused = crawlPaused;
+    setCrawlPaused(true);
+    crawlStage.classList.add("is-dragging");
+    crawlStage.setPointerCapture?.(event.pointerId);
+  });
+
+  crawlStage?.addEventListener("pointermove", (event) => {
+    if (!dragging) return;
+    const dy = event.clientY - lastY;
+    lastY = event.clientY;
+    scrubCrawlByPixels(dy);
+  });
+
+  function endCrawlDrag() {
+    if (!dragging) return;
+    dragging = false;
+    crawlStage?.classList.remove("is-dragging");
+    if (!dragPaused) setCrawlPaused(false);
+  }
+
+  crawlStage?.addEventListener("pointerup", endCrawlDrag);
+  crawlStage?.addEventListener("pointercancel", endCrawlDrag);
+
+  crawlStage?.addEventListener(
+    "wheel",
+    (event) => {
+      if (document.body.dataset.scene !== "crawl") return;
+      event.preventDefault();
+      scrubCrawlByPixels(-event.deltaY);
+    },
+    { passive: false },
+  );
 
   document.addEventListener("keydown", (event) => {
     if (event.code !== "Space" && event.key !== " ") return;

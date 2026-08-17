@@ -227,6 +227,12 @@ body[data-scene="intro"] .long-ago {
   inset: 0;
   z-index: 2;
   overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+}
+
+.crawl-stage.is-dragging {
+  cursor: grabbing;
 }
 
 .crawl-stage[hidden],
