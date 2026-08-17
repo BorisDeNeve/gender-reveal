@@ -523,7 +523,7 @@ body[data-scene="intro"] .long-ago {
 .reveal-fotos {
   display: grid;
   gap: 12px;
-  width: min(92vw, 520px);
+  width: min(92vw, 720px);
   margin: 8px 0 16px;
 }
 
@@ -535,20 +535,13 @@ body[data-scene="intro"] .long-ago {
   overflow: hidden;
 }
 
-@media (min-width: 900px) {
-  .reveal-fotos {
-    width: min(94vw, 980px);
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 .reveal-foto img {
   display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
   object-fit: cover;
-  object-position: center 20%;
+  object-position: center 28%;
 }
 
 .girl-btn {
