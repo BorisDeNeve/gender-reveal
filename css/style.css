@@ -512,12 +512,52 @@ body[data-scene="intro"] .long-ago {
 
 .reveal-note {
   max-width: 26em;
-  margin: 0 0 28px;
+  margin: 0 0 16px;
   color: #ffe81f;
   font-family: "Pathway Gothic One", "News Cycle", sans-serif;
   font-size: 1.25rem;
   letter-spacing: 0.04em;
   line-height: 1.4;
+}
+
+.reveal-foto {
+  width: min(92vw, 520px);
+  margin: 8px 0 16px;
+  border: 2px solid rgba(255, 232, 31, 0.55);
+  box-shadow: 0 0 28px rgba(255, 232, 31, 0.18);
+  overflow: hidden;
+}
+
+.reveal-foto img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center 20%;
+}
+
+.dark-side-seal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 4px 0 0;
+  color: #c62828;
+  font-family: "Pathway Gothic One", "News Cycle", sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.dark-side-seal img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 15%;
+  border: 1px solid rgba(198, 40, 40, 0.7);
+  box-shadow: 0 0 10px rgba(198, 40, 40, 0.45);
 }
 
 .girl-btn {
