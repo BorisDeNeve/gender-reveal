@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hoop ontwaakt</title>
+    <meta
+      name="description"
+      content="Een opening-crawl voor bij de echo: twee geliefden, een nieuw hoopje, een mini-Jedi."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=News+Cycle:wght@400;700&family=Nunito:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css?v=3" />
+  </head>
+  <body class="galaxy" data-scene="start">
+    <canvas id="stars" aria-hidden="true"></canvas>
+    <canvas id="fx" aria-hidden="true"></canvas>
+
+    <!--
+      Zet hier je eigen mp3 neer als je die wettelijk mag gebruiken.
+      Bestand: audio/intro.mp3
+      Geen officiële Star Wars-soundtrack (John Williams) — dat mag niet.
+    -->
+    <audio id="intro-audio" src="audio/intro.mp3" preload="auto"></audio>
+
+    <button class="mute-btn" type="button" data-mute hidden>
+      Geluid uit
+    </button>
+    <button class="skip-btn" type="button" data-skip>
+      Sla de crawl over
+    </button>
+
+    <section class="start-screen" data-start>
+      <p class="start-kicker">Lang geleden, in een sterrenstelsel hier vlakbij…</p>
+      <h1 class="start-title">Hoop ontwaakt</h1>
+      <p class="start-lead">Tik op Start. Daarna komen geluid en crawl samen — klaar voor bij de echo.</p>
+      <button class="start-btn" type="button" data-start-btn>Start</button>
+    </section>
+
+    <!-- Scene: klassieke opening (na Start) -->
+    <p class="long-ago" data-intro hidden>
+      Lang geleden, in een sterrenstelsel<br />hier vlakbij…
+    </p>
+
+    <!-- Scene 2: de crawl. Verhaal + foto’s staan HIER — makkelijk aan te passen. -->
+    <div class="crawl-stage" data-crawl hidden>
+      <div class="crawl-fade" aria-hidden="true"></div>
+      <div class="crawl-perspective">
+        <div class="crawl">
+          <div class="crawl-inner" data-crawl-track>
+            <p class="crawl-episode">Episode Baby</p>
+            <h1 class="crawl-title">Hoop ontwaakt</h1>
+            <hr class="crawl-rule" />
+
+            <!--
+              CRAWL-TEKST — plak hier later hun echte verhaal.
+              Foto’s: bestand in fotos/ en vervang een .crawl-foto door
+              <img src="fotos/naam.jpg" alt="">
+            -->
+
+            <p>
+              In een gewone wereld, ver van keizers en sterrenschepen, vonden
+              twee geliefden elkaar. Niet met een lichtzwaard, maar met een
+              blik die fluisterde: jij bent mijn thuis.
+            </p>
+
+            <figure class="crawl-foto">
+              <span>Foto hier</span>
+            </figure>
+
+            <p>
+              Het begon, zoals alle grote saga’s, met iets onbenulligs. Een
+              toevallige ontmoeting. Een zin die te lang bleef hangen. Een
+              lach die de zwaartekracht even uitzette.
+            </p>
+            <p>
+              Er waren geen holokaarten. Wel koffie. Wel een route die niemand
+              had gepland. Wel twee mensen die, zonder het te merken, dezelfde
+              kant op begonnen te lopen.
+            </p>
+            <p>
+              Samen leerden zij de geheime kunsten van het gewone leven: de
+              kunst van te laat komen, de kunst van de extra deken, de kunst
+              van “ik ben er bijna” terwijl je nog sokken zoekt.
+            </p>
+            <p>
+              Hun avontuur kende geen Sith, maar wél files, feestdagen,
+              verkeerde afslagen en die ene serie die ze “gewoon één aflevering”
+              zouden kijken tot de zon weer opkwam.
+            </p>
+
+            <figure class="crawl-foto">
+              <span>Foto hier</span>
+            </figure>
+
+            <p>
+              In het derde jaar van hun verbond verscheen een raadselachtig
+              voorwerp in de keuken. Het leek op een tosti-ijzer. Het was een
+              tosti-ijzer. Toch behandelden zij het met het respect van een
+              relikwie.
+            </p>
+            <p>
+              Zij reisden naar verre stelsels: de woonboulevard, een
+              verjaardag in een zaaltje, een picknick waar de wind alle
+              servetten naar een andere planeet blies.
+            </p>
+            <p>
+              Er waren ruzies zo klein dat de Senaat ze niet eens in stemming
+              zou brengen. Er waren verzoeningen zo groot dat de sterren even
+              stiller leken te branden.
+            </p>
+            <p>
+              En altijd was er dat gevoel, ergens tussen de boodschappenlijst
+              en de late berichten: dit is het. Dit is de bemanning. Dit is
+              de thuisbasis.
+            </p>
+            <p>
+              Toen kwam het nieuws dat elk sterrenstelsel even stil laat staan.
+              Geen explosie. Geen alarm. Alleen een test, een wacht, een
+              hart dat ineens voor twee klopt.
+            </p>
+            <p>
+              Er is een nieuw wezen onderweg. Klein nog, onzichtbaar bijna,
+              maar al vol belofte. Een passagier zonder ticket. Een plotwending
+              met piepkleine vuisten.
+            </p>
+
+            <figure class="crawl-foto">
+              <span>Foto hier</span>
+            </figure>
+
+            <p>
+              De familie verzamelt zich nu, hartslag na hartslag, bij het
+              scherm waar de toekomst even in beeld komt. Een echo. Een teken.
+              Een eerste groet vanuit het onbekende.
+            </p>
+            <p>
+              In de wachtkamer der sterrenstelsels drinkt iemand te warme
+              koffie. Iemand anders telt de stoelen. Iemand derde doet alsof
+              hij kalm is, en faalt daar schitterend in.
+            </p>
+            <p>
+              Legendes spreken van een oom aan de rand van dit verhaal. Geen
+              Jedi-meester. Wel een man met een laptop, een plan, en een
+              koppige voorspelling die hij al weken hardop oefent.
+            </p>
+            <p>
+              Hij heeft de oude teksten geraadpleegd: buikgevoel, statistiek,
+              en dat ene droombeeld waarin een kleine held een houten lepel
+              als scepter omhooghoudt.
+            </p>
+            <p>
+              De Raad van Tantes is verdeeld. De Orde van Ooms is dat niet.
+              Eén stem klinkt helder door de gang: het wordt een mini-Jedi.
+              Een zoon. Dat is de profetie en daar blijven we bij.
+            </p>
+            <p>
+              Natuurlijk zijn er valse geruchten. Iemand zag “iets roze” in
+              een etalage. Iemand anders kocht alvast een strik “voor de
+              grap”. De oom noteerde dit als mogelijke inmenging van de
+              duistere kant.
+            </p>
+            <p>
+              Ondertussen groeit de kleine onbekende. Week na week. Alsof het
+              heelal zelf een extra stoel bijschuift en fluistert: maak ruimte,
+              er komt iemand aan.
+            </p>
+            <p>
+              De twee geliefden leren nieuwe woorden. Echo. Termijn. Trappel.
+              En die rare, heilige zin: “we worden ouders.” De sterren doen
+              of ze het al wisten.
+            </p>
+            <p>
+              In een parallel universum, beweren de wijzen, bestaat er een
+              handleiding. Hoofdstuk één: blijf ademen. Hoofdstuk twee: koop
+              niet alles wat blinkt. Hoofdstuk drie: de mini-Jedi komt toch
+              wel.
+            </p>
+            <p>
+              Er volgt een lange lijst van dingen die nog niet nodig zijn en
+              toch al in een mand liggen. Sokjes. Een beer. Een vest dat nog
+              niemand past. Hoop, in wasbaar katoen.
+            </p>
+            <p>
+              De oom, terug aan de rand van het frame, zet de credits alvast
+              klaar. Hij ziet blauw. Hij ziet een sabel van licht. Hij ziet
+              een jongen die later, ongetwijfeld, de afstandsbediening zal
+              stelen.
+            </p>
+            <p>
+              Moge de kracht met de aanstaande ouders zijn. Moge de koffie
+              sterk blijven. Moge de echo duidelijk spreken. En moge het
+              wachten, hoe lang ook, voelen als het begin van iets groots.
+            </p>
+            <p>
+              Want dit is geen oorlog tussen sterren. Dit is een gezin dat
+              groter wordt. Twee mensen die elkaar vonden, een avontuur dat
+              doorrolde, en nu: een nieuw hoopje, onderweg, koppig, geliefd.
+            </p>
+            <p>
+              Als deze crawl nóg verder gaat, is dat expres. Zodat je de
+              letters ziet opstijgen. Zodat de zaal even niks anders hoeft
+              te doen dan kijken. Zodat de mini-Jedi alle tijd krijgt om
+              zich voor te stellen.
+            </p>
+            <p>
+              Nog één omweg, voor de volledigheid van de archieven: zij aten
+              pizza op de bank. Zij dansten in de keuken. Zij overleefden een
+              IKEA op zaterdag. Dat, vrienden, is moed.
+            </p>
+            <p>
+              Zij beloofden elkaar geen rijk, geen troon, geen maan van
+              ijs. Alleen dit: erbij blijven. Ook als het laut, ook als het
+              schittert, ook als een piepklein wezen de nachtdienst overneemt.
+            </p>
+            <p>
+              En nu, in deze zaal van witte muren en piepende apparaten, houdt
+              de familie de adem in. Het scherm gloei. Iemand pakt een hand.
+              De oom doet alsof hij niet geëmotioneerd is. Hij faalt opnieuw.
+            </p>
+            <p>
+              De profetie is eenvoudig, en daarom mooi. Geen raadsel in oude
+              runen. Gewoon dit: hij verwacht een mini-Jedi. Een zoon. Een
+              kleine held met een hart zo groot als de ruimte zelf.
+            </p>
+            <p>
+              Als de letters kleiner worden, wees dan niet bang. Dat is de
+              horizon. Achter die horizon wacht een wieg, een naam, een
+              eerste lach, en een heleboel slappe grappen van dezelfde oom.
+            </p>
+            <p>
+              Dit was het verhaal tot nu toe. Twee geliefden. Een avontuur.
+              Een baby onderweg. En een koppige hoop, geel op zwart, die
+              langzaam de diepte in glijdt.
+            </p>
+            <p class="crawl-end">Moge de kracht met hen zijn.</p>
+            <p>
+              Naschrift van de archivist, die duidelijk te veel tijd had:
+              de tosti bleef knapperig. De servetten keerden nooit terug. De
+              liefde wel. Einde van de extra strook. Echt bijna. Nog één zin.
+            </p>
+            <p>
+              Goed. Nu dan. De echo. Het geheim. De mini-Jedi. Kijk naar
+              boven, of naar voren, of naar dat scherm — en zie wat er komt.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scene 3: de onthulling -->
+    <main class="reveal" data-reveal hidden>
+      <p class="reveal-kicker">De echo heeft gesproken</p>
+      <p class="saber" aria-hidden="true"></p>
+      <h1 class="reveal-title">Een mini-Jedi</h1>
+      <p class="reveal-sub">Het wordt een jongen</p>
+      <p class="reveal-note">
+        Een kleine held is onderweg. De kracht is sterk in deze familie.
+      </p>
+    </main>
+
+    <button class="secret-star" type="button" data-secret hidden aria-hidden="true"></button>
+
+    <script src="js/app.js?v=3"></script>
+  </body>
+</html>

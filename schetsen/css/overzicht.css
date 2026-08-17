@@ -1,0 +1,228 @@
+body.overzicht {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Nunito", system-ui, sans-serif;
+  color: #1c2430;
+  background:
+    radial-gradient(900px 500px at 10% -10%, #d7ecff, transparent 55%),
+    radial-gradient(700px 420px at 100% 0%, #ffe9c2, transparent 50%),
+    #f6f1e8;
+}
+
+.wrap {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 48px 0 72px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hero .kicker {
+  display: inline-block;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #1d5f9a;
+  background: rgba(29, 126, 201, 0.12);
+  padding: 8px 14px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.hero h1 {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  margin: 0 0 12px;
+  line-height: 1.15;
+}
+
+.hero p {
+  margin: 0 auto;
+  max-width: 40em;
+  font-size: 1.12rem;
+  line-height: 1.55;
+  color: #445566;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.choice {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(28, 36, 48, 0.1);
+  border: 1px solid rgba(28, 36, 48, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.choice:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 48px rgba(28, 36, 48, 0.16);
+}
+
+.thumb {
+  height: 168px;
+  position: relative;
+  overflow: hidden;
+}
+
+.thumb.feest {
+  background: linear-gradient(165deg, #0b4f8a, #1d7ec9 55%, #7ec4f5);
+}
+
+.thumb.sprookje {
+  background: linear-gradient(180deg, #070b22, #1c2758);
+}
+
+.thumb.bioscoop {
+  background: linear-gradient(180deg, #14110c, #070910);
+}
+
+.thumb.cadeau {
+  background: linear-gradient(165deg, #efe4d4, #d7c0a6);
+}
+
+.thumb .dot {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.thumb.feest .dot {
+  width: 28px;
+  height: 36px;
+  border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%;
+  background: #f0c75e;
+  top: 28px;
+  left: 24px;
+  box-shadow:
+    70px 18px 0 #fff,
+    140px 8px 0 #4aa3e6,
+    210px 30px 0 #0d4a86;
+}
+
+.thumb.sprookje .moon {
+  position: absolute;
+  right: 28px;
+  top: 26px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #e8d48b;
+  box-shadow: 0 0 24px rgba(232, 212, 139, 0.5);
+}
+
+.thumb.sprookje .moon::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  top: -4px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #12183a;
+}
+
+.thumb.sprookje .star {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #fff;
+}
+
+.thumb.bioscoop .lights {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding-top: 18px;
+}
+
+.thumb.bioscoop .lights i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f0c75e;
+  box-shadow: 0 0 8px #f0c75e;
+}
+
+.thumb.bioscoop .title {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #f0c75e;
+  font-family: "Oswald", sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+}
+
+.thumb.cadeau .env {
+  position: absolute;
+  left: 50%;
+  top: 38px;
+  width: 150px;
+  height: 96px;
+  margin-left: -75px;
+  background: #c45c4a;
+  clip-path: polygon(0 28%, 50% 0, 100% 28%, 100% 100%, 0 100%);
+  box-shadow: 0 12px 20px rgba(90, 46, 34, 0.2);
+}
+
+.thumb.cadeau .env::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 28px;
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  border-radius: 50%;
+  background: #4a1018;
+}
+
+.body {
+  padding: 22px 22px 24px;
+}
+
+.body h2 {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.45rem;
+  margin: 0 0 8px;
+}
+
+.body p {
+  margin: 0 0 14px;
+  color: #556170;
+  line-height: 1.5;
+}
+
+.cta {
+  display: inline-block;
+  font-weight: 800;
+  color: #0b4f8a;
+}
+
+.note {
+  margin-top: 36px;
+  text-align: center;
+  color: #667788;
+  font-size: 0.98rem;
+}
+
+@media (max-width: 760px) {
+  .grid { grid-template-columns: 1fr; }
+  .wrap { padding-top: 28px; }
+}

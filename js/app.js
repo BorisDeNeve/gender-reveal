@@ -1,0 +1,392 @@
+const stars = document.getElementById("stars");
+const fx = document.getElementById("fx");
+
+function sizeCanvas(canvas) {
+  if (!canvas) return null;
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  return ctx;
+}
+
+/* —— Sterrenhemel (alleen crawl/reveal) —— */
+if (stars) {
+  const ctx = sizeCanvas(stars);
+  const dots = Array.from({ length: 180 }, () => ({
+    x: Math.random(),
+    y: Math.random(),
+    r: Math.random() * 1.4 + 0.2,
+    a: Math.random() * 0.8 + 0.2,
+    tw: Math.random() * Math.PI * 2,
+  }));
+
+  function drawStars() {
+    ctx.clearRect(0, 0, stars.width, stars.height);
+    const t = performance.now() / 800;
+    for (const d of dots) {
+      ctx.globalAlpha = d.a * (0.55 + 0.45 * Math.sin(t + d.tw));
+      ctx.fillStyle = "#fff";
+      ctx.beginPath();
+      ctx.arc(d.x * stars.width, d.y * stars.height, d.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(drawStars);
+  }
+
+  window.addEventListener("resize", () => sizeCanvas(stars));
+  drawStars();
+}
+
+/* —— Confetti / glitter —— */
+const palettes = {
+  boy: ["#7ec8ff", "#ffe66a", "#ffffff", "#4aa3e6", "#c9a227"],
+  girl: ["#ff4d8d", "#ffb6d9", "#ffffff", "#ffd6ea", "#f3c96b", "#ff7eb3", "#fff0f6"],
+};
+
+let pieces = [];
+let running = false;
+let fxCtx = null;
+let fxColors = palettes.boy;
+
+function spawnBurst(count, colors, fromTop = false) {
+  if (!fx) return;
+  fxCtx = fxCtx || sizeCanvas(fx);
+  const cx = fx.width / 2;
+  const cy = fromTop ? 0 : fx.height * 0.38;
+
+  for (let i = 0; i < count; i += 1) {
+    const angle = fromTop ? Math.PI / 2 + (Math.random() - 0.5) * 1.4 : Math.random() * Math.PI * 2;
+    const speed = fromTop ? 3 + Math.random() * 6 : 7 + Math.random() * 12;
+    pieces.push({
+      x: fromTop ? Math.random() * fx.width : cx,
+      y: fromTop ? -10 : cy,
+      vx: fromTop ? (Math.random() - 0.5) * 4 : Math.cos(angle) * speed,
+      vy: fromTop ? speed : Math.sin(angle) * speed - 5,
+      w: 6 + Math.random() * 9,
+      h: 8 + Math.random() * 12,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * Math.PI,
+      vr: (Math.random() - 0.5) * 0.35,
+      life: 160 + Math.random() * 90,
+      round: Math.random() > 0.55,
+    });
+  }
+}
+
+function tick() {
+  if (!fxCtx) return;
+  fxCtx.clearRect(0, 0, fx.width, fx.height);
+  pieces = pieces.filter((p) => p.life > 0 && p.y < fx.height + 40);
+
+  for (const p of pieces) {
+    p.vy += 0.16;
+    p.vx *= 0.995;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.rot += p.vr;
+    p.life -= 1;
+
+    fxCtx.save();
+    fxCtx.translate(p.x, p.y);
+    fxCtx.rotate(p.rot);
+    fxCtx.globalAlpha = Math.min(1, p.life / 50);
+    fxCtx.fillStyle = p.color;
+    if (p.round) {
+      fxCtx.beginPath();
+      fxCtx.ellipse(0, 0, p.w / 2, p.h / 2, 0, 0, Math.PI * 2);
+      fxCtx.fill();
+    } else {
+      fxCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+    }
+    fxCtx.restore();
+  }
+
+  if (pieces.length) {
+    requestAnimationFrame(tick);
+  } else {
+    running = false;
+  }
+}
+
+function celebrate(kind) {
+  fxColors = palettes[kind] || palettes.boy;
+  if (fx) {
+    fxCtx = sizeCanvas(fx);
+  }
+  spawnBurst(kind === "girl" ? 240 : 180, fxColors, kind === "girl");
+  if (!running) {
+    running = true;
+    tick();
+  }
+  window.setTimeout(() => spawnBurst(kind === "girl" ? 120 : 80, fxColors, kind === "girl"), 420);
+}
+
+window.addEventListener("resize", () => {
+  if (fx) sizeCanvas(fx);
+});
+
+/* —— Audio: eigen mp3 óf originele ruimte-fanfare (geen filmthema) —— */
+const htmlAudio = document.getElementById("intro-audio");
+const muteBtn = document.querySelector("[data-mute]");
+let audioCtx = null;
+let masterGain = null;
+let muted = false;
+
+function applyMute() {
+  if (htmlAudio) htmlAudio.muted = muted;
+  if (masterGain && audioCtx) {
+    masterGain.gain.setTargetAtTime(muted ? 0 : 1, audioCtx.currentTime, 0.04);
+  }
+  if (muteBtn) muteBtn.textContent = muted ? "Geluid aan" : "Geluid uit";
+}
+
+function stopAudio() {
+  if (htmlAudio) {
+    htmlAudio.pause();
+    htmlAudio.currentTime = 0;
+  }
+  if (masterGain && audioCtx) {
+    masterGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.15);
+  }
+}
+
+async function mp3Exists() {
+  try {
+    const res = await fetch("audio/intro.mp3", { method: "HEAD", cache: "no-store" });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+function ensureAudioGraph() {
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  if (!audioCtx) {
+    audioCtx = new Ctx();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = muted ? 0 : 1;
+    masterGain.connect(audioCtx.destination);
+  }
+  if (audioCtx.state === "suspended") audioCtx.resume();
+  return audioCtx;
+}
+
+function playOriginalSpaceIntro() {
+  const ctx = ensureAudioGraph();
+  if (!ctx || !masterGain) return;
+  const now = ctx.currentTime;
+
+  function connectOut(node) {
+    node.connect(masterGain);
+  }
+
+  function pad(freq, start, dur, type, amp) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filt = ctx.createBiquadFilter();
+    osc.type = type;
+    osc.frequency.value = freq;
+    filt.type = "lowpass";
+    filt.frequency.value = 520;
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(amp, start + 1.4);
+    gain.gain.setValueAtTime(amp, start + Math.max(dur - 2.2, 1.6));
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+    osc.connect(filt);
+    filt.connect(gain);
+    connectOut(gain);
+    osc.start(start);
+    osc.stop(start + dur + 0.05);
+  }
+
+  function timpani(freq, time, amp) {
+    const osc = ctx.createOscillator();
+    const noise = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const ng = ctx.createGain();
+    const filt = ctx.createBiquadFilter();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(freq, time);
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.62, time + 0.45);
+    filt.type = "lowpass";
+    filt.frequency.value = 160;
+    gain.gain.setValueAtTime(amp, time);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.95);
+    osc.connect(filt);
+    filt.connect(gain);
+    connectOut(gain);
+    noise.type = "square";
+    noise.frequency.value = freq * 3.1;
+    ng.gain.setValueAtTime(amp * 0.08, time);
+    ng.gain.exponentialRampToValueAtTime(0.0001, time + 0.12);
+    noise.connect(ng);
+    connectOut(ng);
+    osc.start(time);
+    osc.stop(time + 1.05);
+    noise.start(time);
+    noise.stop(time + 0.14);
+  }
+
+  function chord(freqs, time, dur, amp) {
+    const filt = ctx.createBiquadFilter();
+    const gain = ctx.createGain();
+    filt.type = "lowpass";
+    filt.frequency.setValueAtTime(900, time);
+    filt.frequency.linearRampToValueAtTime(1600, time + 0.35);
+    gain.gain.setValueAtTime(0.0001, time);
+    gain.gain.exponentialRampToValueAtTime(amp, time + 0.09);
+    gain.gain.setValueAtTime(amp, time + dur - 0.35);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + dur);
+    filt.connect(gain);
+    connectOut(gain);
+    freqs.forEach((freq) => {
+      const osc = ctx.createOscillator();
+      osc.type = "sawtooth";
+      osc.frequency.value = freq;
+      osc.connect(filt);
+      osc.start(time);
+      osc.stop(time + dur + 0.05);
+    });
+  }
+
+  /* Origineel: mineur-terts-drone, pauken in tweeën, kwartstapeling.
+     Geen kwint-opening, geen da-da-da-daaaa, geen Bb-fanfare. */
+  pad(58.27, now, 56, "sine", 0.11);      /* A#1 — drone, geen kwintpaar */
+  pad(69.3, now, 56, "triangle", 0.05);   /* C#2 — kleine terts erboven */
+  pad(87.31, now + 8, 48, "sine", 0.035); /* F2 — later zachter */
+
+  timpani(46.25, now + 0.9, 0.62);        /* één zware hit */
+  timpani(43.65, now + 2.55, 0.42);       /* twee hits, géén triplet+lang */
+  timpani(38.89, now + 2.82, 0.38);
+
+  chord([123.47, 164.81, 220.0, 293.66], now + 4.05, 1.7, 0.055); /* kwart-achtig: B2 E3 A3 D4 */
+  chord([138.59, 174.61, 220.0, 277.18], now + 5.95, 1.85, 0.06); /* C#3 F3 A3 C#4 */
+  chord([146.83, 184.99, 233.08, 311.13], now + 8.0, 2.6, 0.05);  /* D3 F#3 A#3 D#4 */
+}
+
+async function startAudio() {
+  const hasFile = await mp3Exists();
+  if (hasFile && htmlAudio) {
+    htmlAudio.volume = 0.88;
+    htmlAudio.muted = muted;
+    try {
+      await htmlAudio.play();
+      return;
+    } catch {
+      /* valt terug op originele synth */
+    }
+  }
+  playOriginalSpaceIntro();
+}
+
+muteBtn?.addEventListener("click", () => {
+  muted = !muted;
+  applyMute();
+});
+
+/* —— Crawl-flow —— */
+let finished = false;
+
+function showReveal() {
+  if (finished) return;
+  finished = true;
+  document.body.dataset.scene = "reveal";
+  const start = document.querySelector("[data-start]");
+  const intro = document.querySelector("[data-intro]");
+  const crawl = document.querySelector("[data-crawl]");
+  const reveal = document.querySelector("[data-reveal]");
+  const skip = document.querySelector("[data-skip]");
+  if (start) start.hidden = true;
+  if (intro) intro.hidden = true;
+  if (crawl) crawl.hidden = true;
+  if (skip) skip.hidden = true;
+  if (muteBtn) muteBtn.hidden = true;
+  const secret = document.querySelector("[data-secret]");
+  if (secret) secret.hidden = false;
+  if (reveal) reveal.hidden = false;
+  document.title = "Een mini-Jedi";
+  stopAudio();
+  celebrate("boy");
+}
+
+function startCrawl() {
+  if (finished || document.body.dataset.scene === "reveal") return;
+  document.body.dataset.scene = "crawl";
+  const intro = document.querySelector("[data-intro]");
+  const crawl = document.querySelector("[data-crawl]");
+  if (intro) intro.hidden = true;
+  if (crawl) crawl.hidden = false;
+
+  const track = document.querySelector("[data-crawl-track]");
+  if (!track) return;
+  track.classList.remove("is-crawling");
+  track.style.animationDuration = "";
+  void track.offsetWidth;
+  const pxPerSec = 24;
+  const duration = Math.max(140, Math.round((track.scrollHeight + window.innerHeight) / pxPerSec));
+  track.style.animationDuration = `${duration}s`;
+  track.classList.add("is-crawling");
+  track.addEventListener("animationend", showReveal, { once: true });
+}
+
+function beginShow() {
+  if (finished || document.body.dataset.scene !== "start") return;
+  const start = document.querySelector("[data-start]");
+  const intro = document.querySelector("[data-intro]");
+  const skip = document.querySelector("[data-skip]");
+  if (start) start.hidden = true;
+  if (intro) intro.hidden = false;
+  if (skip) skip.hidden = false;
+  if (muteBtn) muteBtn.hidden = false;
+  document.body.dataset.scene = "intro";
+  startAudio();
+
+  intro?.addEventListener("animationend", startCrawl, { once: true });
+  window.setTimeout(() => {
+    if (document.body.dataset.scene === "intro") startCrawl();
+  }, 5200);
+}
+
+if (document.body.classList.contains("galaxy")) {
+  document.querySelector("[data-start-btn]")?.addEventListener("click", beginShow);
+  document.querySelector("[data-skip]")?.addEventListener("click", showReveal);
+
+  const secret = document.querySelector("[data-secret]");
+  let secretTaps = [];
+  let secretKeys = [];
+
+  function openGirlPage() {
+    window.location.href = "meisje.html";
+  }
+
+  secret?.addEventListener("click", (event) => {
+    event.preventDefault();
+    const now = Date.now();
+    secretTaps = secretTaps.filter((t) => now - t < 1800);
+    secretTaps.push(now);
+    if (secretTaps.length >= 3) openGirlPage();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (document.body.dataset.scene !== "reveal") return;
+    if (event.key !== "m" && event.key !== "M") return;
+    const now = Date.now();
+    secretKeys = secretKeys.filter((t) => now - t < 1800);
+    secretKeys.push(now);
+    if (secretKeys.length >= 3) openGirlPage();
+  });
+}
+
+if (document.body.classList.contains("girl-page")) {
+  celebrate("girl");
+  window.setInterval(() => {
+    spawnBurst(40, palettes.girl, true);
+    if (!running) {
+      running = true;
+      tick();
+    }
+  }, 1800);
+}
+

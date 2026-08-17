@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bioscoop-première — meisje</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Oswald:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/shared.css" />
+    <link rel="stylesheet" href="css/bioscoop.css" />
+  </head>
+  <body class="bioscoop theme-girl" data-fx="bioscoop">
+    <canvas id="confetti"></canvas>
+    <nav class="sketch-bar">
+      <a class="back" href="index.html">← Alle stijlen</a>
+      <a class="pick" href="index.html">Kies deze stijl</a>
+    </nav>
+
+    <div class="stage" aria-hidden="true"></div>
+    <div class="curtain left" aria-hidden="true"></div>
+    <div class="curtain right" aria-hidden="true"></div>
+
+    <main class="page">
+      <div class="marquee">
+        <div class="bulbs" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+        </div>
+        <section class="poster">
+          <div class="pre-reveal">
+            <p class="kicker">Alternate cut</p>
+            <h1>Coming soon</h1>
+            <p class="subtitle">Soms verandert de titel op het laatste moment.</p>
+            <p class="lead">
+              De zaal is hetzelfde, de lichten ook. Alleen de ster van de
+              avond is een andere — als het tóch een meisje is.
+            </p>
+            <button class="reveal-btn" type="button" data-reveal>
+              Start de première
+            </button>
+          </div>
+          <div class="result">
+            <p class="tiny">Now showing</p>
+            <h1 class="big-reveal">HET IS EEN MEISJE!</h1>
+            <p class="note">De ster van de avond: een dochter. Applaus, confetti, en een rol die nog een leven lang duurt.</p>
+            <p class="note">Gefeliciteerd — jullie worden ouders. 🎬</p>
+            <p class="hearts" aria-hidden="true">★ 💗 ★</p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <a href="3-bioscoop.html">Terug naar de jongens-versie</a>
+    </footer>
+    <script src="js/reveal.js"></script>
+  </body>
+</html>

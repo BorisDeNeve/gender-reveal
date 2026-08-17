@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Feest &amp; ballonnen — schets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Nunito:wght@600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/shared.css" />
+    <link rel="stylesheet" href="css/feest.css" />
+  </head>
+  <body class="feest" data-fx="feest">
+    <canvas id="confetti"></canvas>
+    <nav class="sketch-bar">
+      <a class="back" href="index.html">← Alle stijlen</a>
+      <a class="pick" href="index.html">Kies deze stijl</a>
+    </nav>
+
+    <div class="sky" aria-hidden="true">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+    </div>
+    <div class="balloons" aria-hidden="true">
+      <div class="balloon b1"><span class="string"></span></div>
+      <div class="balloon b2"><span class="string"></span></div>
+      <div class="balloon b3"><span class="string"></span></div>
+      <div class="balloon b4"><span class="string"></span></div>
+      <div class="balloon b5"><span class="string"></span></div>
+      <div class="balloon b6"><span class="string"></span></div>
+      <div class="balloon b7"><span class="string"></span></div>
+      <div class="balloon b8"><span class="string"></span></div>
+    </div>
+
+    <main class="page">
+      <section class="card">
+        <div class="pre-reveal">
+          <p class="kicker">Familie-nieuws</p>
+          <h1>Er is iets kleins onderweg…</h1>
+          <p class="lead">
+            Een cadeautje voor mijn broer: het moment waarop we het eindelijk
+            mogen weten. Klaar voor de ballonnen, de confetti en een beetje magie?
+          </p>
+          <button class="reveal-btn" type="button" data-reveal>
+            Onthul het geheim 🎈
+          </button>
+        </div>
+        <div class="result">
+          <p class="tiny">Tromgeroffel… het is een</p>
+          <h1 class="big-reveal">JONGEN!</h1>
+          <p class="note">Welkom, kleine held. De wereld wordt een stukje blauwer — en een stukje groter van liefde.</p>
+          <p class="note">Gefeliciteerd, jullie worden ouders van een zoon. 💙</p>
+          <p class="hearts" aria-hidden="true">🎈 💙 ✨</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <a href="1-feest-meisje.html">Of toch een meisje?</a>
+    </footer>
+    <script src="js/reveal.js"></script>
+  </body>
+</html>

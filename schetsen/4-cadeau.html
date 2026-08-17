@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cadeau-enveloppe — schets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/shared.css" />
+    <link rel="stylesheet" href="css/cadeau.css" />
+  </head>
+  <body class="cadeau" data-fx="cadeau">
+    <canvas id="confetti"></canvas>
+    <nav class="sketch-bar">
+      <a class="back" href="index.html">← Alle stijlen</a>
+      <a class="pick" href="index.html">Kies deze stijl</a>
+    </nav>
+    <div class="tablecloth" aria-hidden="true"></div>
+
+    <main class="page">
+      <div class="intro">
+        <p class="kicker">Speciaal voor jullie</p>
+        <h1>Een enveloppe vol nieuws</h1>
+        <p class="lead">
+          Trek het lint, breek de zegel, en lees de brief. Het geheim zit
+          alvast in de enveloppe — jullie hoeven hem alleen nog te openen.
+        </p>
+      </div>
+
+      <div class="envelope-wrap">
+        <button class="envelope" type="button" data-reveal aria-label="Open de enveloppe">
+          <div class="flap"></div>
+          <div class="letter">
+            <div class="pre-reveal">
+              <p class="hint">Voor de aanstaande ouders</p>
+            </div>
+            <div class="result">
+              <p class="tiny">Het geheim</p>
+              <p class="big-reveal">Het is een jongen!</p>
+              <p class="note">Welkom, kleine held. Met alle liefde.</p>
+            </div>
+          </div>
+          <div class="pocket"></div>
+          <div class="seal">★</div>
+          <div class="ribbon"></div>
+        </button>
+      </div>
+      <p class="hint-outside">Klik op de enveloppe om hem te openen</p>
+    </main>
+
+    <footer class="footer">
+      <a href="4-cadeau-meisje.html">Of toch een meisje?</a>
+    </footer>
+    <script src="js/reveal.js"></script>
+  </body>
+</html>
