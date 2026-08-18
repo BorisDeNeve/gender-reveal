@@ -58,6 +58,11 @@ function padCountdown(n) {
   return String(Math.max(0, n)).padStart(2, "0");
 }
 
+function hideSkipUntilShow() {
+  const skip = document.querySelector("[data-skip]");
+  if (skip) skip.hidden = true;
+}
+
 function initCountdownGate() {
   const invite = document.querySelector("[data-invite]");
   const startScreen = document.querySelector("[data-start]");
@@ -77,6 +82,7 @@ function initCountdownGate() {
     invite.hidden = true;
     startScreen.hidden = false;
     startBtn.disabled = false;
+    hideSkipUntilShow();
     document.body.dataset.scene = "start";
     document.title = "Hoop ontwaakt";
   }
@@ -103,6 +109,7 @@ function initCountdownGate() {
     invite.hidden = true;
     startScreen.hidden = false;
     startBtn.disabled = false;
+    hideSkipUntilShow();
     document.body.dataset.scene = "start";
     document.title = "Hoop ontwaakt";
     return;
@@ -113,6 +120,7 @@ function initCountdownGate() {
   invite.hidden = false;
   startScreen.hidden = true;
   startBtn.disabled = true;
+  hideSkipUntilShow();
   renderCountdown();
   window.setInterval(renderCountdown, 1000);
 }
