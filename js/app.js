@@ -602,7 +602,7 @@ function beginShow() {
   intro?.addEventListener("animationend", startCrawl, { once: true });
   window.setTimeout(() => {
     if (document.body.dataset.scene === "intro") startCrawl();
-  }, 5200);
+  }, 8200);
 }
 
 if (document.body.classList.contains("galaxy")) {

@@ -377,13 +377,14 @@ body[data-scene="invite"] #fx {
 }
 
 body[data-scene="intro"] .long-ago {
-  animation: intro-fade 5s ease forwards;
+  animation: intro-fade 8s ease forwards;
 }
 
 @keyframes intro-fade {
   0% { opacity: 0; }
-  18% { opacity: 1; }
-  72% { opacity: 1; }
+  10% { opacity: 1; }
+  42% { opacity: 1; }
+  58% { opacity: 0; }
   100% { opacity: 0; }
 }
 
@@ -569,9 +570,9 @@ body[data-scene="intro"] .long-ago {
   object-position: center 18%;
 }
 
-/* Start lager: eerste regels verschijnen midden-onder, groot en leesbaar. */
+/* Start onder het scherm: eerste regels komen van onderomhoog. */
 @keyframes crawl-fly {
-  from { transform: translateY(58vh); }
+  from { transform: translateY(110vh); }
   to { transform: translateY(-100%); }
 }
 
