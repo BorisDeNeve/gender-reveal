@@ -360,6 +360,49 @@ function hideGalaxyChrome() {
   if (muteBtn) muteBtn.hidden = true;
 }
 
+function preloadRevealMorph() {
+  document.querySelectorAll(".reveal-morph img").forEach((img) => {
+    if (img.decode) img.decode().catch(() => {});
+    else if (!img.complete) {
+      const warm = new Image();
+      warm.src = img.currentSrc || img.src;
+    }
+  });
+}
+
+function startRevealMorph() {
+  const grin = document.querySelector(".reveal-morph-grin");
+  if (!grin || grin.dataset.morphing === "1") return;
+  grin.dataset.morphing = "1";
+  grin.style.opacity = "0";
+
+  const cycle = 5200;
+  const holdA = 0.3;
+  const fadeIn = 0.44;
+  const holdB = 0.74;
+  const fadeOut = 0.88;
+
+  const ease = (t) => t * t * (3 - 2 * t);
+  let origin = 0;
+
+  function frame(now) {
+    if (!origin) origin = now;
+    const p = ((now - origin) % cycle) / cycle;
+    let opacity = 0;
+    if (p >= holdA && p < fadeIn) opacity = ease((p - holdA) / (fadeIn - holdA));
+    else if (p >= fadeIn && p < holdB) opacity = 1;
+    else if (p >= holdB && p < fadeOut) opacity = 1 - ease((p - holdB) / (fadeOut - holdB));
+    grin.style.opacity = String(opacity);
+    window.requestAnimationFrame(frame);
+  }
+
+  const ready = grin.decode ? grin.decode() : Promise.resolve();
+  const timeout = new Promise((resolve) => window.setTimeout(resolve, 250));
+  Promise.race([ready.catch(() => {}), timeout]).then(() => {
+    window.requestAnimationFrame(frame);
+  });
+}
+
 function showWait() {
   if (isGirlReveal()) {
     window.location.href = "meisje.html";
@@ -374,6 +417,7 @@ function showWait() {
   if (girlLink) girlLink.hidden = false;
   document.title = "De echo";
   stopAudio();
+  preloadRevealMorph();
 }
 
 function showReveal() {
@@ -389,6 +433,7 @@ function showReveal() {
   document.title = "Een mini-Jedi";
   stopAudio();
   celebrate("boy");
+  startRevealMorph();
 }
 
 function startCrawl() {

@@ -546,31 +546,21 @@ body[data-scene="intro"] .long-ago {
 
 .reveal-morph {
   position: relative;
+  aspect-ratio: 3 / 2;
 }
 
-.reveal-morph-grin {
+.reveal-morph img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  aspect-ratio: auto;
   object-fit: cover;
   object-position: center 30%;
-  animation: reveal-morph 5.2s ease-in-out infinite;
 }
 
-@keyframes reveal-morph {
-  0%,
-  30% {
-    opacity: 0;
-  }
-  44%,
-  74% {
-    opacity: 1;
-  }
-  88%,
-  100% {
-    opacity: 0;
-  }
+.reveal-morph-grin {
+  opacity: 0;
 }
 
 .girl-btn {
@@ -863,8 +853,7 @@ body[data-scene="intro"] .long-ago {
   .bow,
   .balloon,
   .glitter,
-  .start-btn,
-  .reveal-morph-grin {
+  .start-btn {
     animation: none;
   }
 
