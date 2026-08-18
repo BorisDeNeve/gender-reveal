@@ -11,10 +11,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=News+Cycle:wght@400;700&family=Nunito:wght@700;800&family=Pathway+Gothic+One&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=News+Cycle:wght@400;700&family=Nunito:wght@400;600;700;800&family=Pathway+Gothic+One&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/style.css?v=20" />
+    <link rel="stylesheet" href="css/style.css?v=22" />
   </head>
   <body class="galaxy" data-scene="start">
     <canvas id="stars" aria-hidden="true"></canvas>
@@ -50,7 +50,41 @@
       <span class="speed-value" data-speed-label>1×</span>
     </aside>
 
-    <section class="start-screen" data-start>
+    <section class="invite-screen" data-invite hidden>
+      <div class="invite-sparkles" aria-hidden="true"></div>
+      <div class="invite-card">
+        <p class="invite-ribbon">U bent uitgenodigd</p>
+        <h1 class="invite-title">Het moment nadert</h1>
+        <p class="invite-lead">
+          Binnenkort opent de echo.<br />
+          Tot die tijd: even ademhalen, even glimlachen.
+        </p>
+        <div class="countdown" data-countdown aria-live="polite">
+          <div class="countdown-unit">
+            <span class="countdown-value" data-countdown-days>—</span>
+            <span class="countdown-label">dagen</span>
+          </div>
+          <span class="countdown-dot" aria-hidden="true">·</span>
+          <div class="countdown-unit">
+            <span class="countdown-value" data-countdown-hours>—</span>
+            <span class="countdown-label">uren</span>
+          </div>
+          <span class="countdown-dot" aria-hidden="true">·</span>
+          <div class="countdown-unit">
+            <span class="countdown-value" data-countdown-minutes>—</span>
+            <span class="countdown-label">minuten</span>
+          </div>
+          <span class="countdown-dot" aria-hidden="true">·</span>
+          <div class="countdown-unit">
+            <span class="countdown-value" data-countdown-seconds>—</span>
+            <span class="countdown-label">seconden</span>
+          </div>
+        </div>
+        <p class="invite-note">19 september 2026 · 12:30 · Nederlandse tijd</p>
+      </div>
+    </section>
+
+    <section class="start-screen" data-start hidden>
       <p class="start-kicker">Lang geleden, in een sterrenstelsel<br />hier vlakbij....</p>
       <h1 class="start-logo" aria-label="Hoop ontwaakt">
         <span>Hoop</span>
@@ -326,6 +360,6 @@
     <a class="girl-link" href="meisje.html" data-girl-link hidden>toch een meisje</a>
 
     <script src="js/config.js"></script>
-    <script src="js/app.js?v=15"></script>
+    <script src="js/app.js?v=17"></script>
   </body>
 </html>

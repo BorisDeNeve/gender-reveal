@@ -126,6 +126,171 @@ a {
   font-size: 0.78rem;
 }
 
+/* =========================================================
+   UITNODIGING / AFTELLER (sierlijk gender-reveal)
+   ========================================================= */
+
+.invite-screen {
+  position: relative;
+  z-index: 4;
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  padding: 48px 20px;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 248, 252, 0.9) 0%, transparent 70%),
+    linear-gradient(165deg, #faf6f0 0%, #f5ebe3 38%, #eef4f8 100%);
+  color: #5c4f4a;
+  overflow: hidden;
+}
+
+body[data-scene="invite"] {
+  background: #faf6f0;
+  color: #5c4f4a;
+}
+
+body[data-scene="invite"] #stars,
+body[data-scene="invite"] #fx {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.invite-sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(201, 162, 39, 0.55), transparent),
+    radial-gradient(1.5px 1.5px at 78% 22%, rgba(168, 198, 218, 0.65), transparent),
+    radial-gradient(1px 1px at 34% 72%, rgba(232, 180, 184, 0.5), transparent),
+    radial-gradient(1.2px 1.2px at 88% 68%, rgba(201, 162, 39, 0.45), transparent),
+    radial-gradient(1px 1px at 52% 44%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 22% 88%, rgba(168, 198, 218, 0.5), transparent);
+  animation: invite-sparkle 6s ease-in-out infinite alternate;
+}
+
+@keyframes invite-sparkle {
+  0% { opacity: 0.45; transform: scale(1); }
+  100% { opacity: 0.85; transform: scale(1.02); }
+}
+
+.invite-card {
+  position: relative;
+  width: min(26rem, 92vw);
+  padding: clamp(2rem, 6vw, 2.8rem) clamp(1.4rem, 5vw, 2.2rem);
+  text-align: center;
+  background: rgba(255, 252, 248, 0.82);
+  border: 1px solid rgba(201, 162, 39, 0.28);
+  border-radius: 2px;
+  box-shadow:
+    0 24px 60px rgba(92, 79, 74, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.invite-card::before,
+.invite-card::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 72%;
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(201, 162, 39, 0.45) 20%,
+    rgba(232, 180, 184, 0.55) 50%,
+    rgba(168, 198, 218, 0.45) 80%,
+    transparent
+  );
+}
+
+.invite-card::before { top: 0; }
+.invite-card::after { bottom: 0; }
+
+.invite-ribbon {
+  margin: 0 0 10px;
+  font-family: "Nunito", sans-serif;
+  font-size: clamp(0.68rem, 2vw, 0.78rem);
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: #a8c6da;
+}
+
+.invite-title {
+  margin: 0 0 14px;
+  font-family: "Great Vibes", cursive;
+  font-size: clamp(2.6rem, 10vw, 3.6rem);
+  font-weight: 400;
+  line-height: 1.05;
+  color: #b8922a;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.invite-lead {
+  margin: 0 0 28px;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: clamp(1.05rem, 3.2vw, 1.28rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.55;
+  color: #6b5e58;
+}
+
+.countdown {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px 4px;
+  margin-bottom: 22px;
+}
+
+.countdown-unit {
+  display: grid;
+  gap: 4px;
+  min-width: 3.4rem;
+}
+
+.countdown-value {
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: clamp(2rem, 8vw, 3rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: #5c4f4a;
+}
+
+.countdown-label {
+  font-family: "Nunito", sans-serif;
+  font-size: clamp(0.62rem, 1.8vw, 0.72rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(168, 150, 140, 0.88);
+}
+
+.countdown-dot {
+  align-self: center;
+  margin: 0 2px 1.1rem;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  line-height: 1;
+  color: rgba(201, 162, 39, 0.45);
+}
+
+.invite-note {
+  margin: 0;
+  font-family: "Nunito", sans-serif;
+  font-size: clamp(0.68rem, 2vw, 0.76rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(168, 198, 218, 0.95);
+}
+
 .start-screen {
   position: relative;
   z-index: 4;
@@ -240,6 +405,7 @@ body[data-scene="intro"] .long-ago {
 .long-ago[hidden],
 .skip-btn[hidden],
 .mute-btn[hidden],
+.invite-screen[hidden],
 .start-screen[hidden],
 .secret-star[hidden],
 .crawl-controls[hidden],
@@ -855,6 +1021,11 @@ body[data-scene="intro"] .long-ago {
   .glitter,
   .start-btn {
     animation: none;
+  }
+
+  .invite-sparkles {
+    animation: none;
+    opacity: 0.6;
   }
 
   .long-ago {

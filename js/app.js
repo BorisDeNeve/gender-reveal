@@ -7,6 +7,120 @@ function isGirlReveal() {
   return window.GENDER_REVEAL === "meisje";
 }
 
+// Eigenaar-preview: ?preview of ?nu ontgrendelt Start vóór het reveal-moment.
+function isPreviewMode() {
+  const params = new URLSearchParams(window.location.search);
+  return params.has("preview") || params.has("nu");
+}
+
+function zonedDateTimeToUtc({ year, month, day, hour, minute, second, timeZone }) {
+  const utcGuess = Date.UTC(year, month - 1, day, hour, minute, second);
+  const dtf = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hourCycle: "h23",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+
+  function getOffset(ms) {
+    const parts = Object.fromEntries(
+      dtf.formatToParts(new Date(ms)).filter((p) => p.type !== "literal").map((p) => [p.type, p.value]),
+    );
+    const asUtc = Date.UTC(
+      Number(parts.year),
+      Number(parts.month) - 1,
+      Number(parts.day),
+      Number(parts.hour),
+      Number(parts.minute),
+      Number(parts.second),
+    );
+    return asUtc - ms;
+  }
+
+  let ms = utcGuess;
+  for (let i = 0; i < 3; i += 1) {
+    ms = utcGuess - getOffset(ms);
+  }
+  return ms;
+}
+
+function getRevealTimestamp() {
+  const cfg = window.REVEAL_AT;
+  if (!cfg) return 0;
+  return zonedDateTimeToUtc(cfg);
+}
+
+function padCountdown(n) {
+  return String(Math.max(0, n)).padStart(2, "0");
+}
+
+function initCountdownGate() {
+  const invite = document.querySelector("[data-invite]");
+  const startScreen = document.querySelector("[data-start]");
+  const startBtn = document.querySelector("[data-start-btn]");
+  const daysEl = document.querySelector("[data-countdown-days]");
+  const hoursEl = document.querySelector("[data-countdown-hours]");
+  const minutesEl = document.querySelector("[data-countdown-minutes]");
+  const secondsEl = document.querySelector("[data-countdown-seconds]");
+  if (!invite || !startScreen || !startBtn) return;
+
+  const revealAt = getRevealTimestamp();
+  let unlocked = isPreviewMode();
+
+  function unlockStart() {
+    if (unlocked) return;
+    unlocked = true;
+    invite.hidden = true;
+    startScreen.hidden = false;
+    startBtn.disabled = false;
+    document.body.dataset.scene = "start";
+    document.title = "Hoop ontwaakt";
+  }
+
+  function renderCountdown() {
+    if (unlocked) return;
+    const remaining = revealAt - Date.now();
+    if (remaining <= 0) {
+      unlockStart();
+      return;
+    }
+    const totalSeconds = Math.floor(remaining / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    if (daysEl) daysEl.textContent = String(days);
+    if (hoursEl) hoursEl.textContent = padCountdown(hours);
+    if (minutesEl) minutesEl.textContent = padCountdown(minutes);
+    if (secondsEl) secondsEl.textContent = padCountdown(seconds);
+  }
+
+  if (unlocked || Date.now() >= revealAt) {
+    invite.hidden = true;
+    startScreen.hidden = false;
+    startBtn.disabled = false;
+    document.body.dataset.scene = "start";
+    document.title = "Hoop ontwaakt";
+    return;
+  }
+
+  document.body.dataset.scene = "invite";
+  document.title = "Het moment nadert";
+  invite.hidden = false;
+  startScreen.hidden = true;
+  startBtn.disabled = true;
+  renderCountdown();
+  window.setInterval(renderCountdown, 1000);
+}
+
+function isRevealUnlocked() {
+  return isPreviewMode() || Date.now() >= getRevealTimestamp();
+}
+
 function sizeCanvas(canvas) {
   if (!canvas) return null;
   const ctx = canvas.getContext("2d");
@@ -466,6 +580,7 @@ function startCrawl() {
 
 function beginShow() {
   if (document.body.dataset.scene !== "start") return;
+  if (!isRevealUnlocked()) return;
   const start = document.querySelector("[data-start]");
   const intro = document.querySelector("[data-intro]");
   const skip = document.querySelector("[data-skip]");
@@ -483,6 +598,7 @@ function beginShow() {
 }
 
 if (document.body.classList.contains("galaxy")) {
+  initCountdownGate();
   document.querySelector("[data-start-btn]")?.addEventListener("click", beginShow);
   document.querySelector("[data-skip]")?.addEventListener("click", showWait);
   document.querySelector("[data-after-echo]")?.addEventListener("click", showReveal);
