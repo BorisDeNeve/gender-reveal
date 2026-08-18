@@ -416,6 +416,7 @@ muteBtn?.addEventListener("click", () => {
 
 /* —— Crawl-flow —— */
 let crawlPaused = false;
+let crawlEndTimer = 0;
 let crawlSpeed = 1;
 
 function crawlTrack() {
@@ -528,6 +529,7 @@ function startRevealMorph() {
 }
 
 function showWait() {
+  window.clearTimeout(crawlEndTimer);
   if (isGirlReveal()) {
     window.location.href = "meisje.html";
     return;
@@ -577,7 +579,14 @@ function startCrawl() {
   const duration = Math.max(55, Math.round((track.scrollHeight + window.innerHeight) / pxPerSec));
   track.style.animationDuration = `${duration}s`;
   track.classList.add("is-crawling");
-  track.addEventListener("animationend", showWait, { once: true });
+  track.addEventListener(
+    "animationend",
+    () => {
+      if (document.body.dataset.scene !== "crawl") return;
+      crawlEndTimer = window.setTimeout(showWait, 1800);
+    },
+    { once: true },
+  );
   const controls = document.querySelector("[data-crawl-controls]");
   if (controls) controls.hidden = false;
   window.requestAnimationFrame(() => {

@@ -572,10 +572,10 @@ body[data-scene="intro"] .long-ago {
   object-position: center 18%;
 }
 
-/* Eerste regels starten aan de onderrand en kruipen het vlak op. */
+/* Eerste regels starten aan de onderrand en kruipen het vlak af tot ze boven verdwijnen. */
 @keyframes crawl-fly {
   from { transform: translateY(0); }
-  to { transform: translateY(-100%); }
+  to { transform: translateY(calc(-100% - 100vh)); }
 }
 
 /* —— Wachten op de echo —— */
