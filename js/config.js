@@ -1,6 +1,5 @@
-// Als de echo een meisje is: zet hieronder "meisje" in plaats van "jongen".
-// Daarna gaat de site ná de crawl meteen naar de meisjes-pagina.
-window.GENDER_REVEAL = "jongen";
+// Alleen zetten als de echo tóch de andere kant op gaat: "meisje".
+window.GENDER_REVEAL = "";
 
 // Officieel reveal-moment (Europe/Amsterdam, incl. zomertijd).
 window.REVEAL_AT = {

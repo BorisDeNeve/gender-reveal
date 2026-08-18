@@ -490,13 +490,73 @@ function hideGalaxyChrome() {
 }
 
 function preloadRevealMorph() {
-  document.querySelectorAll(".reveal-morph img").forEach((img) => {
-    if (img.decode) img.decode().catch(() => {});
-    else if (!img.complete) {
-      const warm = new Image();
-      warm.src = img.currentSrc || img.src;
-    }
+  [
+    "fotos/max-marjean-baby-reveal-normaal.png?v=6",
+    "fotos/max-marjean-baby-reveal-greins.png?v=6",
+  ].forEach((src) => {
+    const warm = new Image();
+    warm.src = src;
   });
+}
+
+function mountReveal() {
+  const reveal = document.querySelector("[data-reveal]");
+  if (!reveal || reveal.dataset.ready === "1") return;
+  reveal.innerHTML = `
+      <p class="reveal-kicker">De echo heeft gesproken</p>
+      <p class="saber" aria-hidden="true"></p>
+      <h1 class="reveal-title">Een mini-Jedi</h1>
+      <p class="reveal-sub">Het wordt een jongen</p>
+      <div class="reveal-fotos">
+        <figure class="reveal-foto reveal-morph">
+          <img
+            src="fotos/max-marjean-baby-reveal-normaal.png?v=6"
+            alt="Max en Marjean met hun zoon: eerst een rustig babygezicht, dan gele ogen en een kleine greins"
+          />
+          <img
+            class="reveal-morph-grin"
+            src="fotos/max-marjean-baby-reveal-greins.png?v=6"
+            alt=""
+            aria-hidden="true"
+          />
+        </figure>
+      </div>
+      <p class="reveal-note">
+        Een kleine held is onderweg. De kracht is sterk in deze familie.
+      </p>`;
+  reveal.dataset.ready = "1";
+}
+
+function mountGirlLink() {
+  if (document.querySelector("[data-girl-link]")) return;
+  const a = document.createElement("a");
+  a.className = "girl-link";
+  a.setAttribute("data-girl-link", "");
+  a.href = atob("bWVpc2plLmh0bWw=");
+  a.textContent = atob("dG9jaCBlZW4gbWVpc2pl");
+  document.body.appendChild(a);
+}
+
+let openingPromise = null;
+
+function ensureOpening() {
+  if (openingPromise) return openingPromise;
+  const track = document.querySelector("[data-crawl-track]");
+  openingPromise = fetch("data/opening.html")
+    .then((res) => {
+      if (!res.ok) throw new Error("opening");
+      return res.text();
+    })
+    .then((html) => {
+      if (track && track.dataset.filled !== "1") {
+        track.innerHTML = html;
+        track.dataset.filled = "1";
+      }
+    })
+    .catch(() => {
+      openingPromise = null;
+    });
+  return openingPromise;
 }
 
 function startRevealMorph() {
@@ -556,6 +616,8 @@ function showReveal() {
   if (document.body.dataset.scene === "reveal") return;
   document.body.dataset.scene = "reveal";
   hideGalaxyChrome();
+  mountReveal();
+  mountGirlLink();
   const wait = document.querySelector("[data-wait]");
   const reveal = document.querySelector("[data-reveal]");
   const girlLink = document.querySelector("[data-girl-link]");
@@ -569,41 +631,51 @@ function showReveal() {
 }
 
 function startCrawl() {
-  if (document.body.dataset.scene === "wait" || document.body.dataset.scene === "reveal") return;
+  if (
+    document.body.dataset.scene === "wait" ||
+    document.body.dataset.scene === "reveal" ||
+    document.body.dataset.scene === "crawl"
+  ) {
+    return;
+  }
   document.body.dataset.scene = "crawl";
   const intro = document.querySelector("[data-intro]");
   const crawl = document.querySelector("[data-crawl]");
   if (intro) intro.hidden = true;
-  if (crawl) crawl.hidden = false;
 
-  const track = document.querySelector("[data-crawl-track]");
-  if (!track) return;
-  track.classList.remove("is-crawling");
-  track.style.animationDuration = "";
-  void track.offsetWidth;
-  const pxPerSec = 52;
-  const duration = Math.max(55, Math.round(crawlTravelPx(track) / pxPerSec));
-  track.style.animationDuration = `${duration}s`;
-  track.classList.add("is-crawling");
-  track.addEventListener(
-    "animationend",
-    () => {
-      if (document.body.dataset.scene !== "crawl") return;
-      crawlEndTimer = window.setTimeout(showWait, 1300);
-    },
-    { once: true },
-  );
-  const controls = document.querySelector("[data-crawl-controls]");
-  if (controls) controls.hidden = false;
-  window.requestAnimationFrame(() => {
-    applyCrawlSpeed();
-    setCrawlPaused(crawlPaused);
+  ensureOpening().then(() => {
+    if (document.body.dataset.scene !== "crawl") return;
+    if (crawl) crawl.hidden = false;
+    const track = document.querySelector("[data-crawl-track]");
+    if (!track || track.dataset.filled !== "1") return;
+    track.classList.remove("is-crawling");
+    track.style.animationDuration = "";
+    void track.offsetWidth;
+    const pxPerSec = 52;
+    const duration = Math.max(55, Math.round(crawlTravelPx(track) / pxPerSec));
+    track.style.animationDuration = `${duration}s`;
+    track.classList.add("is-crawling");
+    track.addEventListener(
+      "animationend",
+      () => {
+        if (document.body.dataset.scene !== "crawl") return;
+        crawlEndTimer = window.setTimeout(showWait, 1300);
+      },
+      { once: true },
+    );
+    const controls = document.querySelector("[data-crawl-controls]");
+    if (controls) controls.hidden = false;
+    window.requestAnimationFrame(() => {
+      applyCrawlSpeed();
+      setCrawlPaused(crawlPaused);
+    });
   });
 }
 
 function beginShow() {
   if (document.body.dataset.scene !== "start") return;
   if (!isRevealUnlocked()) return;
+  ensureOpening();
   const start = document.querySelector("[data-start]");
   const intro = document.querySelector("[data-intro]");
   const skip = document.querySelector("[data-skip]");
