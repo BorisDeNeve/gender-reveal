@@ -434,8 +434,7 @@ body[data-scene="intro"] .long-ago {
   overflow: hidden;
 }
 
-/* Gekanteld vlak = schermhoogte. Gecentreerd, milde rotateX zodat
-   de eerste regels midden-onder lang leesbaar blijven. */
+/* Gekanteld vlak: onderkant van het scherm is dichtbij, bovenkant verdwijnt. */
 .crawl {
   position: absolute;
   left: 50%;
@@ -448,6 +447,9 @@ body[data-scene="intro"] .long-ago {
 }
 
 .crawl-inner {
+  position: absolute;
+  left: 0;
+  top: 100%;
   width: 100%;
   text-align: justify;
   text-align-last: center;
@@ -570,9 +572,9 @@ body[data-scene="intro"] .long-ago {
   object-position: center 18%;
 }
 
-/* Start onder het scherm: eerste regels komen van onderomhoog. */
+/* Eerste regels starten aan de onderrand en kruipen het vlak op. */
 @keyframes crawl-fly {
-  from { transform: translateY(110vh); }
+  from { transform: translateY(0); }
   to { transform: translateY(-100%); }
 }
 
