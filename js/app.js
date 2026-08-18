@@ -376,11 +376,13 @@ function startRevealMorph() {
   grin.dataset.morphing = "1";
   grin.style.opacity = "0";
 
-  const cycle = 5200;
-  const holdA = 0.3;
-  const fadeIn = 0.44;
-  const holdB = 0.74;
-  const fadeOut = 0.88;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const cycle = 9000;
+  const holdA = 0.12;
+  const fadeIn = 0.30;
+  const holdB = 0.62;
+  const fadeOut = 0.80;
 
   const ease = (t) => t * t * (3 - 2 * t);
   let origin = 0;
