@@ -429,7 +429,7 @@ function crawlAnimation() {
 }
 
 function crawlTravelPx(track) {
-  return track.scrollHeight + window.innerHeight * 1.15;
+  return track.scrollHeight + window.innerHeight * 1.75;
 }
 
 function applyCrawlSpeed() {
@@ -589,7 +589,7 @@ function startCrawl() {
     "animationend",
     () => {
       if (document.body.dataset.scene !== "crawl") return;
-      crawlEndTimer = window.setTimeout(showWait, 900);
+      crawlEndTimer = window.setTimeout(showWait, 1300);
     },
     { once: true },
   );

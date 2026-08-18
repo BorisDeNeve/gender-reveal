@@ -575,7 +575,7 @@ body[data-scene="intro"] .long-ago {
 /* Door tot voorbij het verdwijnpunt, anders blijven de laatste regels hangen. */
 @keyframes crawl-fly {
   from { transform: translateY(0); }
-  to { transform: translateY(calc(-100% - 110vh)); }
+  to { transform: translateY(calc(-100% - 175vh)); }
 }
 
 /* —— Wachten op de echo —— */
