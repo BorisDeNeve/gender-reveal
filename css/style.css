@@ -420,10 +420,16 @@ body[data-scene="intro"] .long-ago {
   left: 0;
   right: 0;
   top: 0;
-  height: 28%;
+  height: 52%;
   z-index: 3;
   pointer-events: none;
-  background: linear-gradient(#000 0%, rgba(0, 0, 0, 0.55) 55%, transparent 100%);
+  background: linear-gradient(
+    #000 0%,
+    #000 28%,
+    rgba(0, 0, 0, 0.82) 62%,
+    rgba(0, 0, 0, 0.35) 82%,
+    transparent 100%
+  );
 }
 
 .crawl-perspective {
@@ -442,6 +448,7 @@ body[data-scene="intro"] .long-ago {
   bottom: 0;
   width: min(88vw, 780px);
   height: 100%;
+  overflow: hidden;
   transform: translateX(-50%) rotateX(15deg);
   transform-origin: 50% 100%;
 }
@@ -572,10 +579,10 @@ body[data-scene="intro"] .long-ago {
   object-position: center 18%;
 }
 
-/* Eerste regels starten aan de onderrand en kruipen het vlak af tot ze boven verdwijnen. */
+/* Door tot voorbij het verdwijnpunt, anders blijven de laatste regels hangen. */
 @keyframes crawl-fly {
   from { transform: translateY(0); }
-  to { transform: translateY(calc(-100% - 100vh)); }
+  to { transform: translateY(calc(-100% - 240vh)); }
 }
 
 /* —— Wachten op de echo —— */
@@ -737,6 +744,7 @@ body[data-scene="intro"] .long-ago {
 }
 
 .girl-link {
+  display: none !important;
   position: fixed;
   left: 14px;
   bottom: 12px;
@@ -746,6 +754,10 @@ body[data-scene="intro"] .long-ago {
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-decoration: none;
+}
+
+body[data-scene="reveal"] .girl-link {
+  display: block !important;
 }
 
 .girl-link:hover,

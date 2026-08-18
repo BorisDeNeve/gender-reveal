@@ -428,6 +428,10 @@ function crawlAnimation() {
   return track?.getAnimations?.()?.[0] ?? null;
 }
 
+function crawlTravelPx(track) {
+  return track.scrollHeight + window.innerHeight * 2.5;
+}
+
 function applyCrawlSpeed() {
   const anim = crawlAnimation();
   if (anim) anim.playbackRate = crawlSpeed;
@@ -448,7 +452,7 @@ function scrubCrawlByPixels(dy) {
   const anim = crawlAnimation();
   const track = crawlTrack();
   if (!anim || !track) return;
-  const travel = track.scrollHeight + window.innerHeight;
+  const travel = crawlTravelPx(track);
   const msPerPx = travel > 0 ? crawlDurationMs(anim) / travel : 20;
   const next = (anim.currentTime || 0) - dy * msPerPx;
   const max = crawlDurationMs(anim) || next;
@@ -475,12 +479,14 @@ function hideGalaxyChrome() {
   const crawl = document.querySelector("[data-crawl]");
   const skip = document.querySelector("[data-skip]");
   const controls = document.querySelector("[data-crawl-controls]");
+  const girlLink = document.querySelector("[data-girl-link]");
   if (start) start.hidden = true;
   if (intro) intro.hidden = true;
   if (crawl) crawl.hidden = true;
   if (skip) skip.hidden = true;
   if (controls) controls.hidden = true;
   if (muteBtn) muteBtn.hidden = true;
+  if (girlLink) girlLink.hidden = true;
 }
 
 function preloadRevealMorph() {
@@ -538,7 +544,9 @@ function showWait() {
   document.body.dataset.scene = "wait";
   hideGalaxyChrome();
   const wait = document.querySelector("[data-wait]");
+  const girlLink = document.querySelector("[data-girl-link]");
   if (wait) wait.hidden = false;
+  if (girlLink) girlLink.hidden = true;
   document.title = "De echo";
   stopAudio();
   preloadRevealMorph();
@@ -574,14 +582,14 @@ function startCrawl() {
   track.style.animationDuration = "";
   void track.offsetWidth;
   const pxPerSec = 52;
-  const duration = Math.max(55, Math.round((track.scrollHeight + window.innerHeight) / pxPerSec));
+  const duration = Math.max(55, Math.round(crawlTravelPx(track) / pxPerSec));
   track.style.animationDuration = `${duration}s`;
   track.classList.add("is-crawling");
   track.addEventListener(
     "animationend",
     () => {
       if (document.body.dataset.scene !== "crawl") return;
-      crawlEndTimer = window.setTimeout(showWait, 1800);
+      crawlEndTimer = window.setTimeout(showWait, 2000);
     },
     { once: true },
   );
