@@ -420,16 +420,10 @@ body[data-scene="intro"] .long-ago {
   left: 0;
   right: 0;
   top: 0;
-  height: 52%;
+  height: 22%;
   z-index: 3;
   pointer-events: none;
-  background: linear-gradient(
-    #000 0%,
-    #000 28%,
-    rgba(0, 0, 0, 0.82) 62%,
-    rgba(0, 0, 0, 0.35) 82%,
-    transparent 100%
-  );
+  background: linear-gradient(#000 0%, rgba(0, 0, 0, 0.5) 45%, transparent 100%);
 }
 
 .crawl-perspective {
@@ -448,7 +442,6 @@ body[data-scene="intro"] .long-ago {
   bottom: 0;
   width: min(88vw, 780px);
   height: 100%;
-  overflow: hidden;
   transform: translateX(-50%) rotateX(15deg);
   transform-origin: 50% 100%;
 }
