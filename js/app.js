@@ -538,9 +538,7 @@ function showWait() {
   document.body.dataset.scene = "wait";
   hideGalaxyChrome();
   const wait = document.querySelector("[data-wait]");
-  const girlLink = document.querySelector("[data-girl-link]");
   if (wait) wait.hidden = false;
-  if (girlLink) girlLink.hidden = false;
   document.title = "De echo";
   stopAudio();
   preloadRevealMorph();
