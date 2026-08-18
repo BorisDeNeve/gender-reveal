@@ -13,6 +13,10 @@ function isPreviewMode() {
   return params.has("preview") || params.has("nu");
 }
 
+function skipCountdown() {
+  return window.SKIP_COUNTDOWN === true;
+}
+
 function zonedDateTimeToUtc({ year, month, day, hour, minute, second, timeZone }) {
   const utcGuess = Date.UTC(year, month - 1, day, hour, minute, second);
   const dtf = new Intl.DateTimeFormat("en-US", {
@@ -74,7 +78,7 @@ function initCountdownGate() {
   if (!invite || !startScreen || !startBtn) return;
 
   const revealAt = getRevealTimestamp();
-  let unlocked = isPreviewMode();
+  let unlocked = isPreviewMode() || skipCountdown();
 
   function unlockStart() {
     if (unlocked) return;
@@ -126,7 +130,7 @@ function initCountdownGate() {
 }
 
 function isRevealUnlocked() {
-  return isPreviewMode() || Date.now() >= getRevealTimestamp();
+  return isPreviewMode() || skipCountdown() || Date.now() >= getRevealTimestamp();
 }
 
 function sizeCanvas(canvas) {
