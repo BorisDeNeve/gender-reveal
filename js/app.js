@@ -542,7 +542,7 @@ let openingPromise = null;
 function ensureOpening() {
   if (openingPromise) return openingPromise;
   const track = document.querySelector("[data-crawl-track]");
-  openingPromise = fetch("data/opening.html")
+  openingPromise = fetch("data/opening.html?v=4")
     .then((res) => {
       if (!res.ok) throw new Error("opening");
       return res.text();
