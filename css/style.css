@@ -658,6 +658,13 @@ body[data-scene="intro"] .long-ago {
     0 0 36px #1d7ec9;
 }
 
+.saber-rose {
+  box-shadow:
+    0 0 8px #ffd6ea,
+    0 0 18px #ff8fb8,
+    0 0 36px #c94a7a;
+}
+
 .reveal-title {
   margin: 0;
   font-family: "Bebas Neue", "Pathway Gothic One", sans-serif;

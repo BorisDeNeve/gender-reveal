@@ -3,51 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Hoera, toch een meisje!</title>
-    <meta name="description" content="Plotwending: het is tóch een meisje." />
+    <title>Een mini-prinses</title>
+    <meta name="description" content="De echo heeft gesproken." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=News+Cycle:wght@400;700&family=Pathway+Gothic+One&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css?v=32" />
   </head>
-  <body class="girl-page">
+  <body class="galaxy" data-scene="reveal" data-outcome="girl">
+    <canvas id="stars" aria-hidden="true"></canvas>
     <canvas id="fx" aria-hidden="true"></canvas>
 
-    <div class="glitter" aria-hidden="true"></div>
-
-    <div class="bows" aria-hidden="true">
-      <span class="bow b-1">🎀</span>
-      <span class="bow b-2">🎀</span>
-      <span class="bow b-3">🎀</span>
-      <span class="bow b-4">🎀</span>
-      <span class="bow b-5">🎀</span>
-      <span class="bow b-6">🎀</span>
-    </div>
-
-    <div class="balloons" aria-hidden="true">
-      <div class="balloon pink"><span class="string"></span></div>
-      <div class="balloon blush"><span class="string"></span></div>
-      <div class="balloon white"><span class="string"></span></div>
-      <div class="balloon gold"><span class="string"></span></div>
-      <div class="balloon hot"><span class="string"></span></div>
-      <div class="balloon pink late"><span class="string"></span></div>
-    </div>
-
-    <main class="girl-card">
-      <p class="girl-kicker">Plotwending · strikjes · glitter</p>
-      <p class="girl-emoji" aria-hidden="true">💗 🎀 ✨</p>
-      <h1>Hoera, toch een meisje!</h1>
-      <p class="girl-lead">
-        De mini-Jedi mag even wachten. Dit sterrenstelsel kleurt
-        <em>roze</em> — en de feestjes worden nóg groter.
+    <main class="reveal">
+      <p class="reveal-kicker">De echo heeft gesproken</p>
+      <p class="saber saber-rose" aria-hidden="true"></p>
+      <h1 class="reveal-title">Een mini-prinses</h1>
+      <p class="reveal-sub">Het wordt een meisje</p>
+      <div class="reveal-fotos">
+        <figure class="reveal-foto">
+          <img
+            src="fotos/max-marjean-baby-reveal-meisje.png"
+            alt="Max en Marjean met hun dochter, een mini-prinses"
+          />
+        </figure>
+      </div>
+      <p class="reveal-note">
+        De Raad van Tantes had gelijk. De lichte kant wint dit keer.
+        Welkom, kleine prinses.
       </p>
-      <p class="girl-lead">Welkom, kleine prinses. De wereld wordt zachter, glitteriger, en een stukje voller van liefde.</p>
-      <a class="back-galaxy" href="index.html">Terug naar de crawl</a>
     </main>
 
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=31"></script>
   </body>
 </html>

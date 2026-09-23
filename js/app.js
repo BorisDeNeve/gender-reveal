@@ -792,7 +792,7 @@ if (document.body.classList.contains("galaxy")) {
   });
 }
 
-if (document.body.classList.contains("girl-page")) {
+if (document.body.classList.contains("girl-page") || document.body.dataset.outcome === "girl") {
   celebrate("girl");
   window.setInterval(() => {
     spawnBurst(40, palettes.girl, true);
