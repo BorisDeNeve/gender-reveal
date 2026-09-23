@@ -1,5 +1,4 @@
-// Alleen zetten als de echo tóch de andere kant op gaat: "meisje".
-window.GENDER_REVEAL = "";
+window.GENDER_REVEAL = "meisje";
 
 // Officieel reveal-moment (Europe/Amsterdam, incl. zomertijd).
 window.REVEAL_AT = {

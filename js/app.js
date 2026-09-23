@@ -596,10 +596,6 @@ function startRevealMorph() {
 
 function showWait() {
   window.clearTimeout(crawlEndTimer);
-  if (isGirlReveal()) {
-    window.location.href = "meisje.html";
-    return;
-  }
   if (document.body.dataset.scene === "wait" || document.body.dataset.scene === "reveal") return;
   document.body.dataset.scene = "wait";
   hideGalaxyChrome();
@@ -609,10 +605,14 @@ function showWait() {
   if (girlLink) girlLink.hidden = true;
   document.title = "De echo";
   stopAudio();
-  preloadRevealMorph();
+  if (!isGirlReveal()) preloadRevealMorph();
 }
 
 function showReveal() {
+  if (isGirlReveal()) {
+    window.location.href = "meisje.html";
+    return;
+  }
   if (document.body.dataset.scene === "reveal") return;
   document.body.dataset.scene = "reveal";
   hideGalaxyChrome();
