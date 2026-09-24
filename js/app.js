@@ -573,7 +573,7 @@ let openingPromise = null;
 function ensureOpening() {
   if (openingPromise) return openingPromise;
   const track = document.querySelector("[data-crawl-track]");
-  openingPromise = fetch("data/opening.html?v=8")
+  openingPromise = fetch("data/opening.html?v=9")
     .then((res) => {
       if (!res.ok) throw new Error("opening");
       return res.text();
@@ -663,16 +663,48 @@ function showReveal() {
   startRevealMorph();
 }
 
-function watchResultButton() {
-  const btn = document.querySelector("[data-see-result]");
-  if (!btn) return;
+function resultButtonOffset(track, btn) {
+  let y = btn.offsetHeight / 2;
+  for (let node = btn; node && node !== track; node = node.offsetParent) {
+    y += node.offsetTop;
+  }
+  return y;
+}
 
+function resultButtonPageY() {
+  const btn = document.querySelector("[data-see-result]");
+  const track = crawlTrack();
+  const anim = crawlAnimation();
+  if (!btn || !track) return null;
+  const duration = crawlDurationMs(anim);
+  const progress = anim && duration ? (Number(anim.currentTime) || 0) / duration : 0;
+  return window.innerHeight + resultButtonOffset(track, btn) - progress * crawlTravelPx(track);
+}
+
+function snapResultButtonToMiddle() {
+  const btn = document.querySelector("[data-see-result]");
+  const track = crawlTrack();
+  const anim = crawlAnimation();
+  resultDocked = true;
+  if (!btn || !track || !anim) {
+    setCrawlPaused(true);
+    return;
+  }
+  const duration = crawlDurationMs(anim);
+  const travel = crawlTravelPx(track);
+  const distance = window.innerHeight + resultButtonOffset(track, btn) - window.innerHeight * 0.5;
+  const progress = travel > 0 ? Math.min(1, Math.max(0, distance / travel)) : 1;
+  if (duration) anim.currentTime = duration * progress;
+  setCrawlPaused(true);
+}
+
+function watchResultButton() {
   function tick() {
-    if (document.body.dataset.scene !== "crawl" || resultDocked) return;
-    const rect = btn.getBoundingClientRect();
-    if (rect.height > 0 && rect.top + rect.height / 2 <= window.innerHeight * 0.52) {
-      resultDocked = true;
-      setCrawlPaused(true);
+    if (document.body.dataset.scene !== "crawl") return;
+    if (resultDocked) return;
+    const y = resultButtonPageY();
+    if (y != null && y <= window.innerHeight * 0.5) {
+      snapResultButtonToMiddle();
       return;
     }
     window.requestAnimationFrame(tick);
@@ -711,8 +743,7 @@ function startCrawl() {
       "animationend",
       () => {
         if (document.body.dataset.scene !== "crawl") return;
-        resultDocked = true;
-        setCrawlPaused(true);
+        snapResultButtonToMiddle();
       },
       { once: true },
     );
@@ -761,6 +792,7 @@ if (document.body.classList.contains("galaxy")) {
 
   document.querySelector("[data-pause]")?.addEventListener("click", () => {
     if (document.body.dataset.scene !== "crawl") return;
+    if (resultDocked) return;
     setCrawlPaused(!crawlPaused);
   });
 
@@ -803,7 +835,7 @@ if (document.body.classList.contains("galaxy")) {
     if (!dragging) return;
     dragging = false;
     crawlStage?.classList.remove("is-dragging");
-    if (!dragPaused) setCrawlPaused(false);
+    if (!dragPaused && !resultDocked) setCrawlPaused(false);
   }
 
   crawlStage?.addEventListener("pointerup", endCrawlDrag);
@@ -822,6 +854,7 @@ if (document.body.classList.contains("galaxy")) {
   document.addEventListener("keydown", (event) => {
     if (event.code !== "Space" && event.key !== " ") return;
     if (document.body.dataset.scene !== "crawl") return;
+    if (resultDocked) return;
     if (event.target.matches("input, button, textarea")) return;
     event.preventDefault();
     setCrawlPaused(!crawlPaused);
