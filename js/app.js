@@ -419,6 +419,7 @@ muteBtn?.addEventListener("click", () => {
 let crawlPaused = false;
 let crawlEndTimer = 0;
 let crawlSpeed = 1;
+let resultDocked = false;
 
 function crawlTrack() {
   return document.querySelector("[data-crawl-track]");
@@ -572,7 +573,7 @@ let openingPromise = null;
 function ensureOpening() {
   if (openingPromise) return openingPromise;
   const track = document.querySelector("[data-crawl-track]");
-  openingPromise = fetch("data/opening.html?v=7")
+  openingPromise = fetch("data/opening.html?v=8")
     .then((res) => {
       if (!res.ok) throw new Error("opening");
       return res.text();
@@ -662,6 +663,24 @@ function showReveal() {
   startRevealMorph();
 }
 
+function watchResultButton() {
+  const btn = document.querySelector("[data-see-result]");
+  if (!btn) return;
+
+  function tick() {
+    if (document.body.dataset.scene !== "crawl" || resultDocked) return;
+    const rect = btn.getBoundingClientRect();
+    if (rect.height > 0 && rect.top + rect.height / 2 <= window.innerHeight * 0.52) {
+      resultDocked = true;
+      setCrawlPaused(true);
+      return;
+    }
+    window.requestAnimationFrame(tick);
+  }
+
+  window.requestAnimationFrame(tick);
+}
+
 function startCrawl() {
   if (
     document.body.dataset.scene === "wait" ||
@@ -680,6 +699,7 @@ function startCrawl() {
     if (crawl) crawl.hidden = false;
     const track = document.querySelector("[data-crawl-track]");
     if (!track || track.dataset.filled !== "1") return;
+    resultDocked = false;
     track.classList.remove("is-crawling");
     track.style.animationDuration = "";
     void track.offsetWidth;
@@ -691,7 +711,8 @@ function startCrawl() {
       "animationend",
       () => {
         if (document.body.dataset.scene !== "crawl") return;
-        crawlEndTimer = window.setTimeout(showWait, 1300);
+        resultDocked = true;
+        setCrawlPaused(true);
       },
       { once: true },
     );
@@ -700,6 +721,7 @@ function startCrawl() {
     window.requestAnimationFrame(() => {
       applyCrawlSpeed();
       setCrawlPaused(crawlPaused);
+      watchResultButton();
     });
   });
 }
@@ -727,7 +749,14 @@ function beginShow() {
 if (document.body.classList.contains("galaxy")) {
   initCountdownGate();
   document.querySelector("[data-start-btn]")?.addEventListener("click", beginShow);
-  document.querySelector("[data-skip]")?.addEventListener("click", showWait);
+  document.querySelector("[data-skip]")?.addEventListener("click", showReveal);
+  document.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-see-result]");
+    if (!btn) return;
+    event.preventDefault();
+    event.stopPropagation();
+    showReveal();
+  });
   document.querySelector("[data-after-echo]")?.addEventListener("click", showReveal);
 
   document.querySelector("[data-pause]")?.addEventListener("click", () => {
@@ -746,7 +775,7 @@ if (document.body.classList.contains("galaxy")) {
   let dragPaused = false;
 
   function ignoreCrawlDrag(target) {
-    return target.closest(".crawl-controls, .skip-btn, .mute-btn, .pause-btn, .speed-slider");
+    return target.closest(".crawl-controls, .skip-btn, .mute-btn, .pause-btn, .speed-slider, [data-see-result]");
   }
 
   crawlStage?.addEventListener("pointerdown", (event) => {

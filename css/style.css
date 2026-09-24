@@ -500,6 +500,30 @@ body[data-scene="intro"] .long-ago {
   margin: 0 auto 1.4em;
 }
 
+.crawl-result-wrap {
+  text-align: center !important;
+  margin: 2.4em 0 3.2em;
+}
+
+.crawl-result-btn {
+  appearance: none;
+  border: 2px solid #4bd5ee;
+  background: rgba(0, 0, 0, 0.4);
+  color: #4bd5ee;
+  font-family: "Pathway Gothic One", "News Cycle", sans-serif;
+  font-size: clamp(1.05rem, 3.4vw, 1.45rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  cursor: pointer;
+}
+
+.crawl-result-btn:hover,
+.crawl-result-btn:focus-visible {
+  color: #ffe81f;
+  border-color: #ffe81f;
+}
+
 .crawl-end {
   letter-spacing: 0.08em;
   text-transform: uppercase;
