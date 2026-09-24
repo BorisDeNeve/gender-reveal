@@ -686,6 +686,12 @@ body[data-scene="intro"] .long-ago {
   text-transform: uppercase;
 }
 
+.replay-btn {
+  display: inline-block;
+  margin-top: 22px;
+  text-decoration: none;
+}
+
 .reveal-note {
   max-width: 26em;
   margin: 0 0 16px;

@@ -3,8 +3,9 @@ const fx = document.getElementById("fx");
 
 function isGirlReveal() {
   const params = new URLSearchParams(window.location.search);
+  if (params.has("jongen") || params.get("gender") === "jongen") return false;
   if (params.has("meisje") || params.get("gender") === "meisje") return true;
-  return window.GENDER_REVEAL === "meisje";
+  return window.GENDER_REVEAL !== "jongen";
 }
 
 // Eigenaar-preview: ?preview of ?nu ontgrendelt Start vóór het reveal-moment.
@@ -490,19 +491,46 @@ function hideGalaxyChrome() {
 }
 
 function preloadRevealMorph() {
-  [
-    "fotos/max-marjean-baby-reveal-normaal.png?v=6",
-    "fotos/max-marjean-baby-reveal-greins.png?v=6",
-  ].forEach((src) => {
-    const warm = new Image();
-    warm.src = src;
-  });
+  const src = isGirlReveal()
+    ? "fotos/max-marjean-baby-reveal-meisje.png"
+    : "fotos/max-marjean-baby-reveal-normaal.png?v=6";
+  const warm = new Image();
+  warm.src = src;
+}
+
+function replayUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.has("preview") || params.has("nu") ? "index.html?preview" : "index.html";
+}
+
+function replayButton() {
+  return `<a class="start-btn replay-btn" href="${replayUrl()}">Bekijk opnieuw</a>`;
 }
 
 function mountReveal() {
   const reveal = document.querySelector("[data-reveal]");
   if (!reveal || reveal.dataset.ready === "1") return;
-  reveal.innerHTML = `
+  if (isGirlReveal()) {
+    reveal.innerHTML = `
+      <p class="reveal-kicker">De echo heeft gesproken</p>
+      <p class="saber saber-rose" aria-hidden="true"></p>
+      <h1 class="reveal-title">Een mini-prinses</h1>
+      <p class="reveal-sub">Het wordt een meisje</p>
+      <div class="reveal-fotos">
+        <figure class="reveal-foto">
+          <img
+            src="fotos/max-marjean-baby-reveal-meisje.png"
+            alt="Max en Marjean met hun dochter, een mini-prinses"
+          />
+        </figure>
+      </div>
+      <p class="reveal-note">
+        De Raad van Tantes had gelijk. De lichte kant wint dit keer.
+        Welkom, kleine prinses.
+      </p>
+      ${replayButton()}`;
+  } else {
+    reveal.innerHTML = `
       <p class="reveal-kicker">De echo heeft gesproken</p>
       <p class="saber" aria-hidden="true"></p>
       <h1 class="reveal-title">Een mini-Jedi</h1>
@@ -523,7 +551,9 @@ function mountReveal() {
       </div>
       <p class="reveal-note">
         Een kleine held is onderweg. De kracht is sterk in deze familie.
-      </p>`;
+      </p>
+      ${replayButton()}`;
+  }
   reveal.dataset.ready = "1";
 }
 
@@ -605,27 +635,29 @@ function showWait() {
   if (girlLink) girlLink.hidden = true;
   document.title = "De echo";
   stopAudio();
-  if (!isGirlReveal()) preloadRevealMorph();
+  preloadRevealMorph();
 }
 
 function showReveal() {
-  if (isGirlReveal()) {
-    window.location.href = "meisje.html";
-    return;
-  }
   if (document.body.dataset.scene === "reveal") return;
   document.body.dataset.scene = "reveal";
   hideGalaxyChrome();
   mountReveal();
-  mountGirlLink();
   const wait = document.querySelector("[data-wait]");
   const reveal = document.querySelector("[data-reveal]");
-  const girlLink = document.querySelector("[data-girl-link]");
   if (wait) wait.hidden = true;
-  if (girlLink) girlLink.hidden = false;
   if (reveal) reveal.hidden = false;
-  document.title = "Een mini-Jedi";
   stopAudio();
+  if (isGirlReveal()) {
+    document.title = "Een mini-prinses";
+    document.body.dataset.outcome = "girl";
+    celebrate("girl");
+    return;
+  }
+  mountGirlLink();
+  const girlLink = document.querySelector("[data-girl-link]");
+  if (girlLink) girlLink.hidden = false;
+  document.title = "Een mini-Jedi";
   celebrate("boy");
   startRevealMorph();
 }
